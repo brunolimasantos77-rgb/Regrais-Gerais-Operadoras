@@ -283,6 +283,12 @@ function domainFrom(str){
   if(m)return m[1].replace(/^www\./,"");
   return null;
 }
+function directImg(str){
+  const s=clean(str);
+  const m=s.match(/https?:\/\/[^\s,"']+/i);
+  if(m && /\.(png|jpe?g|svg|webp|gif)(\?.*)?$/i.test(m[0]))return m[0];
+  return null;
+}
 function initials(name){
   const w=name.replace(/[^A-Za-zÀ-ÿ0-9 ]/g,"").trim().split(/\s+/).filter(Boolean);
   if(!w.length)return "?";
@@ -293,6 +299,7 @@ function colorFor(name){let h=0;for(let i=0;i<name.length;i++)h=(h*31+name.charC
 function shade(hex,p){let n=parseInt(hex.slice(1),16);let r=(n>>16)+p*2.55,g=((n>>8)&255)+p*2.55,b=(n&255)+p*2.55;r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));return"#"+((1<<24)+((r|0)<<16)+((g|0)<<8)+(b|0)).toString(16).slice(1);}
 
 function logoEl(op,size){
+  const direct=directImg(op.logoLink)||directImg(op.site);
   const dom=domainFrom(op.logoLink)||domainFrom(op.site);
   const color=colorFor(op.nome);
   const makeFb=()=>{
@@ -302,10 +309,17 @@ function logoEl(op,size){
     if(size)d.style.cssText+=";width:"+size+"px;height:"+size+"px;font-size:"+(size*0.33)+"px";
     d.textContent=initials(op.nome);return d;
   };
+  const img=document.createElement("img");
+  img.className="op-logo";img.alt=op.nome;img.loading="lazy";
+  if(size)img.style.cssText="width:"+size+"px;height:"+size+"px";
+  if(direct){
+    // link direto da imagem da logo -> usa exatamente como veio
+    img.src=direct;
+    img.onerror=function(){const f=makeFb();if(this.parentNode)this.parentNode.replaceChild(f,this);};
+    return img;
+  }
   if(dom){
-    const img=document.createElement("img");
-    img.className="op-logo";img.alt=op.nome;img.loading="lazy";
-    if(size)img.style.cssText="width:"+size+"px;height:"+size+"px";
+    // a partir do site do convenio -> tenta logo, depois favicone, depois iniciais
     img.src="https://logo.clearbit.com/"+dom;
     img.onerror=function(){
       this.onerror=function(){const f=makeFb();if(this.parentNode)this.parentNode.replaceChild(f,this);};
