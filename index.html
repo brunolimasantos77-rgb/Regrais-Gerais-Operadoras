@@ -195,11 +195,33 @@ const KNOWN_NAMES=["AFA ACADEMIA DA FORÇA AÉREA PIRASSUNUNGA - SP","AMPARA","A
 const KNOWN_SET={};KNOWN_NAMES.forEach(n=>KNOWN_SET[n]=1);
 function norm(s){return (s==null?"":String(s)).trim().toUpperCase().replace(/\s+/g," ");}
 
-// Fundo escuro para logos com escrita branca: controle 100% pela planilha.
-// Basta escrever "dark" (ou "escuro") depois do link da logo na coluna LINK LOGO.
-function wantsDark(op){
-  const s=(clean(op.logoLink)+" "+clean(op.site)).toLowerCase();
-  return /(^|\s)(dark|escuro|fundo escuro)(\s|$)/.test(s);
+// Cor de fundo do quadradinho da logo: escolha pela planilha.
+// Depois do link da logo, escreva um espaco e a cor desejada, por exemplo:
+//   https://site.com/logo.png dark      (fundo escuro)
+//   https://site.com/logo.png green     (verde institucional)
+//   https://site.com/logo.png #1f7a4d   (qualquer cor em codigo hex)
+// Palavras aceitas (PT ou EN): dark/escuro, preto/black, verde/green, azul/blue,
+// laranja/orange, vermelho/red, cinza/gray, branco/white.
+const BG_COLORS={
+  dark:"#3a4452", escuro:"#3a4452", preto:"#1a1d21", black:"#1a1d21",
+  verde:"#1f7a4d", green:"#1f7a4d", azul:"#2d6cdf", blue:"#2d6cdf",
+  laranja:"#e8772e", orange:"#e8772e", vermelho:"#c0392b", red:"#c0392b",
+  cinza:"#6b7280", gray:"#6b7280", grey:"#6b7280", branco:"#ffffff", white:"#ffffff"
+};
+function logoBg(op){
+  // pega somente o texto que vem DEPOIS do link (evita falso positivo em nomes/URLs)
+  function tail(cell){
+    cell=clean(cell);
+    const m=cell.match(/https?:\/\/\S+/i);
+    if(!m)return "";
+    return cell.slice(m.index+m[0].length).trim().toLowerCase();
+  }
+  const rest=(tail(op.logoLink)+" "+tail(op.site)).trim();
+  if(!rest)return null;
+  const hex=rest.match(/#([0-9a-f]{6}|[0-9a-f]{3})\b/i);
+  if(hex)return "#"+hex[1];
+  for(const k in BG_COLORS){ if(new RegExp("(^|\\s)"+k+"(\\s|$)").test(rest))return BG_COLORS[k]; }
+  return null;
 }
 
 let DATA=[];
@@ -318,10 +340,13 @@ function logoEl(op,size){
     if(size)d.style.cssText+=";width:"+size+"px;height:"+size+"px;font-size:"+(size*0.33)+"px";
     d.textContent=initials(op.nome);return d;
   };
-  const dk=wantsDark(op)?" dark":"";
+  const bg=logoBg(op);
   const img=document.createElement("img");
-  img.className="op-logo"+dk;img.alt=op.nome;img.loading="lazy";
-  if(size)img.style.cssText="width:"+size+"px;height:"+size+"px";
+  img.className="op-logo";img.alt=op.nome;img.loading="lazy";
+  let st="";
+  if(size)st+="width:"+size+"px;height:"+size+"px;";
+  if(bg)st+="background:"+bg+";border-color:"+bg+";padding:7px;";
+  if(st)img.style.cssText=st;
   if(direct){
     // link direto da imagem da logo -> usa exatamente como veio
     img.src=direct;
