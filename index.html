@@ -67,6 +67,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .op-card:active{transform:translateY(-1px)}
 .op-logo{width:64px;height:64px;border-radius:16px;object-fit:contain;background:var(--white);border:1px solid var(--line);margin-bottom:13px}
 .op-logo.fallback{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;color:#fff;border:none}
+.op-logo.dark{background:#3a4452;border-color:#3a4452;padding:7px}
 .op-name{font-size:14.5px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:6px}
 .op-upd{font-size:11.5px;color:var(--muted)}
 .op-upd b{color:var(--green);font-weight:600}
@@ -194,6 +195,16 @@ const KNOWN_NAMES=["AFA ACADEMIA DA FORÇA AÉREA PIRASSUNUNGA - SP","AMPARA","A
 const KNOWN_SET={};KNOWN_NAMES.forEach(n=>KNOWN_SET[n]=1);
 function norm(s){return (s==null?"":String(s)).trim().toUpperCase().replace(/\s+/g," ");}
 
+// Convenios cujas logos tem escrita branca -> recebem fundo escuro por padrao.
+// Voce tambem pode controlar pela planilha: escreva "dark" depois do link da logo.
+const DARK_LOGO_NAMES=["NEW LEADER","UNIMED NORDESTE","UNIMED RIBEIRÃO PRETO","UNIMED RIBEIRAO PRETO","SERMED"];
+const DARK_SET={};DARK_LOGO_NAMES.forEach(n=>DARK_SET[n]=1);
+function wantsDark(op){
+  const s=(clean(op.logoLink)+" "+clean(op.site)).toLowerCase();
+  if(/(^|\s)(dark|escuro|fundo escuro)(\s|$)/.test(s))return true;
+  return !!DARK_SET[norm(op.nome)];
+}
+
 let DATA=[];
 
 function parseCSV(text){
@@ -285,7 +296,8 @@ function domainFrom(str){
 }
 function directImg(str){
   const s=clean(str);
-  const m=s.match(/https?:\/\/[^\s,"']+/i);
+  // aceita URLs com virgula (ex.: links do Wix). Para so antes de um espaco.
+  const m=s.match(/https?:\/\/[^\s"']+/i);
   if(m && /\.(png|jpe?g|svg|webp|gif)(\?.*)?$/i.test(m[0]))return m[0];
   return null;
 }
@@ -309,8 +321,9 @@ function logoEl(op,size){
     if(size)d.style.cssText+=";width:"+size+"px;height:"+size+"px;font-size:"+(size*0.33)+"px";
     d.textContent=initials(op.nome);return d;
   };
+  const dk=wantsDark(op)?" dark":"";
   const img=document.createElement("img");
-  img.className="op-logo";img.alt=op.nome;img.loading="lazy";
+  img.className="op-logo"+dk;img.alt=op.nome;img.loading="lazy";
   if(size)img.style.cssText="width:"+size+"px;height:"+size+"px";
   if(direct){
     // link direto da imagem da logo -> usa exatamente como veio
