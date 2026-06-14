@@ -195,14 +195,11 @@ const KNOWN_NAMES=["AFA ACADEMIA DA FORÇA AÉREA PIRASSUNUNGA - SP","AMPARA","A
 const KNOWN_SET={};KNOWN_NAMES.forEach(n=>KNOWN_SET[n]=1);
 function norm(s){return (s==null?"":String(s)).trim().toUpperCase().replace(/\s+/g," ");}
 
-// Convenios cujas logos tem escrita branca -> recebem fundo escuro por padrao.
-// Voce tambem pode controlar pela planilha: escreva "dark" depois do link da logo.
-const DARK_LOGO_NAMES=["NEW LEADER","UNIMED NORDESTE","UNIMED RIBEIRÃO PRETO","UNIMED RIBEIRAO PRETO","SERMED"];
-const DARK_SET={};DARK_LOGO_NAMES.forEach(n=>DARK_SET[n]=1);
+// Fundo escuro para logos com escrita branca: controle 100% pela planilha.
+// Basta escrever "dark" (ou "escuro") depois do link da logo na coluna LINK LOGO.
 function wantsDark(op){
   const s=(clean(op.logoLink)+" "+clean(op.site)).toLowerCase();
-  if(/(^|\s)(dark|escuro|fundo escuro)(\s|$)/.test(s))return true;
-  return !!DARK_SET[norm(op.nome)];
+  return /(^|\s)(dark|escuro|fundo escuro)(\s|$)/.test(s);
 }
 
 let DATA=[];
