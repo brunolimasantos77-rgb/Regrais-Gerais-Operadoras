@@ -68,6 +68,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .op-logo{width:64px;height:64px;border-radius:16px;object-fit:contain;background:var(--white);border:1px solid var(--line);margin-bottom:13px}
 .op-logo.fallback{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;color:#fff;border:none}
 .op-logo.dark{background:#3a4452;border-color:#3a4452;padding:7px}
+.op-card.inactive{opacity:.72}
+.op-card.inactive .op-logo{filter:grayscale(.5)}
+.status-badge{position:absolute;top:10px;right:10px;background:#c0392b;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:20px;text-transform:uppercase;box-shadow:0 2px 6px rgba(192,57,43,.35)}
+.status-badge.lg{position:static;font-size:12px;padding:5px 12px}
 .op-name{font-size:14.5px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:6px}
 .op-upd{font-size:11.5px;color:var(--muted)}
 .op-upd b{color:var(--green);font-weight:600}
@@ -270,17 +274,36 @@ function buildRecords(text){
       const s=idxs[k], e=(k+1<idxs.length)?idxs[k+1]:flat.length;
       recs.push(flat.slice(s,e));
     }
-    return finalize(recs);
+    return finalize(recs,null);
   }
 
   let hIdx=rows.findIndex(r=>isHeaderName(r[0]));
   if(hIdx<0)hIdx=0;
+  const ex=extraIndices(rows[hIdx]);
   const dataRows=[];
   for(let r=hIdx+1;r<rows.length;r++){
     if(isClinicName(rows[r][0]))break;
     dataRows.push(rows[r]);
   }
-  return finalize(dataRows);
+  return finalize(dataRows,ex);
+}
+
+// Localiza as colunas NOVAS pelo nome do cabecalho (posicao livre, basta estarem
+// no fim da planilha). Acentos sao ignorados na comparacao.
+function normH(s){var t=clean(s).toUpperCase();var a="ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ",b="AAAAAEEEEIIIIOOOOOUUUUC",o="";for(var i=0;i<t.length;i++){var p=a.indexOf(t[i]);o+=p>=0?b[p]:t[i];}return o.replace(/\s+/g," ");}
+function extraIndices(header){
+  if(!header)return null;
+  const H=header.map(normH);
+  const findRe=re=>{for(let i=0;i<H.length;i++){if(re.test(H[i]))return i;}return -1;};
+  const find=fn=>{for(let i=0;i<H.length;i++){if(fn(H[i]))return i;}return -1;};
+  return {
+    status: findRe(/\bSTATUS\b/),
+    ans: findRe(/\bANS\b/),
+    remocao: find(h=>h.indexOf("REMOCAO")>=0 && h.indexOf("PSIQ")<0),
+    remocaoPsiq: find(h=>h.indexOf("REMOCAO")>=0 && h.indexOf("PSIQ")>=0),
+    servicos: find(h=>h.indexOf("SERVICOS")>=0 && h.indexOf("CONTRAT")>=0),
+    prazoUrg: find(h=>h.indexOf("URGENCIA")>=0)
+  };
 }
 
 function datey(s){return /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(clean(s));}
@@ -294,7 +317,7 @@ function realign(r){
   }
   return r;
 }
-function finalize(dataRows){
+function finalize(dataRows,ex){
   const out=[];
   dataRows.forEach(raw=>{
     let r=realign(raw.slice());
@@ -302,9 +325,22 @@ function finalize(dataRows){
     if(!name)return;
     if(isClinicName(name)||isHeaderName(name))return;
     const o={};COLS.forEach((k,idx)=>o[k]=clean(r[idx]));
+    // colunas novas (localizadas pelo nome do cabecalho)
+    o.status      = (ex&&ex.status>=0)?clean(raw[ex.status]):"";
+    o.ans         = (ex&&ex.ans>=0)?clean(raw[ex.ans]):"";
+    o.remocao     = (ex&&ex.remocao>=0)?clean(raw[ex.remocao]):"";
+    o.remocaoPsiq = (ex&&ex.remocaoPsiq>=0)?clean(raw[ex.remocaoPsiq]):"";
+    o.servicos    = (ex&&ex.servicos>=0)?clean(raw[ex.servicos]):"";
+    o.prazoUrg    = (ex&&ex.prazoUrg>=0)?clean(raw[ex.prazoUrg]):"";
     out.push(o);
   });
   return out;
+}
+function statusInfo(o){
+  const s=clean(o.status).toUpperCase();
+  if(/SUSPEN/.test(s))return {bad:true,label:"SUSPENSO"};
+  if(/INATIV/.test(s))return {bad:true,label:"INATIVO"};
+  return {bad:false,label:""};
 }
 
 function domainFrom(str){
@@ -378,7 +414,7 @@ function show(id){["loading","error","home","detail"].forEach(x=>el(x).classList
 
 function renderHome(){
   el("kpi-total").textContent=DATA.length;
-  el("kpi-ativas").textContent=DATA.length;
+  el("kpi-ativas").textContent=DATA.filter(o=>!statusInfo(o).bad).length;
   let max=null;
   DATA.forEach(o=>{const d=parseDate(o.atualizacao);if(d&&(!max||d>max))max=d;});
   el("kpi-data").textContent=max?max.toLocaleDateString("pt-BR"):"—";
@@ -397,6 +433,8 @@ function renderGrid(){
   el("empty").classList.toggle("hidden",list.length>0);
   list.forEach(o=>{
     const c=document.createElement("div");c.className="op-card fade";
+    const st=statusInfo(o);
+    if(st.bad){c.classList.add("inactive");const b=document.createElement("span");b.className="status-badge";b.textContent=st.label;c.appendChild(b);}
     c.appendChild(logoEl(o,64));
     const nm=document.createElement("div");nm.className="op-name";nm.textContent=o.nome;c.appendChild(nm);
     const up=document.createElement("div");up.className="op-upd";up.innerHTML="Atualizado: <b>"+fmtDate(o.atualizacao)+"</b>";c.appendChild(up);
@@ -438,6 +476,10 @@ function openDetail(o){
   };
   const secRec=section("Recepção",false,svgUser(),[
     ["Documentos obrigatórios para consulta",o.documentos],
+    ["Serviços contratados",o.servicos],
+    ["Remoção",o.remocao],
+    ["Remoção Psiquiatria",o.remocaoPsiq],
+    ["Prazo solicitação Urgência e Emergência",o.prazoUrg],
     ["Site da Operadora",o.site||o.logoLink],
     ["Portal de Elegibilidade",o.portal],
     ["Contatos (e-mail)",o.contatos]
@@ -474,7 +516,8 @@ function openDetail(o){
 
   el("detail").innerHTML=
    '<div class="breadcrumb"><button id="bc-home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Início</button><span class="sep">/</span><span>Operadoras</span><span class="sep">/</span><span class="current">'+esc(o.nome)+'</span></div>'+
-   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+'</h1><div class="dh-meta">'+
+   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(statusInfo(o).bad?' <span class="status-badge lg">'+statusInfo(o).label+'</span>':'')+'</h1><div class="dh-meta">'+
+     (isEmptyVal(o.ans)?'':'<span class="chip">ANS nº <b>'+esc(clean(o.ans))+'</b></span>')+
      '<span class="chip">Vigência da tabela: <b>'+fmtDate(o.vigencia)+'</b></span>'+
      '<span class="chip">Última atualização: <b>'+fmtDate(o.atualizacao)+'</b></span>'+
      linkChip("Telefone",o.telefone,ic.phone)+
