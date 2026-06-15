@@ -71,7 +71,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .op-card.inactive{opacity:.72}
 .op-card.inactive .op-logo{filter:grayscale(.5)}
 .status-badge{position:absolute;top:10px;right:10px;background:#c0392b;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:20px;text-transform:uppercase;box-shadow:0 2px 6px rgba(192,57,43,.35)}
-.status-badge.lg{position:static;font-size:12px;padding:5px 12px}
+.status-badge.lg{position:static;font-size:12px;padding:5px 12px;vertical-align:middle}
+.op-susp{font-size:11px;color:#c0392b;font-weight:600;margin-top:4px}
 .op-name{font-size:14.5px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:6px}
 .op-upd{font-size:11.5px;color:var(--muted)}
 .op-upd b{color:var(--green);font-weight:600}
@@ -337,10 +338,11 @@ function finalize(dataRows,ex){
   return out;
 }
 function statusInfo(o){
-  const s=clean(o.status).toUpperCase();
-  if(/SUSPEN/.test(s))return {bad:true,label:"SUSPENSO"};
-  if(/INATIV/.test(s))return {bad:true,label:"INATIVO"};
-  return {bad:false,label:""};
+  const s=clean(o.status);const up=s.toUpperCase();
+  const dm=s.match(/\d{1,2}\/\d{1,2}\/\d{2,4}/);const date=dm?dm[0]:"";
+  if(/SUSPEN/.test(up))return {bad:true,label:"SUSPENSO",verbo:"Suspenso",date:date};
+  if(/INATIV/.test(up))return {bad:true,label:"INATIVO",verbo:"Inativo",date:date};
+  return {bad:false,label:"",verbo:"",date:""};
 }
 
 function domainFrom(str){
@@ -438,6 +440,7 @@ function renderGrid(){
     c.appendChild(logoEl(o,64));
     const nm=document.createElement("div");nm.className="op-name";nm.textContent=o.nome;c.appendChild(nm);
     const up=document.createElement("div");up.className="op-upd";up.innerHTML="Atualizado: <b>"+fmtDate(o.atualizacao)+"</b>";c.appendChild(up);
+    if(st.bad&&st.date){const sn=document.createElement("div");sn.className="op-susp";sn.textContent=st.verbo+" desde "+st.date;c.appendChild(sn);}
     c.onclick=()=>openDetail(o);
     g.appendChild(c);
   });
@@ -516,7 +519,7 @@ function openDetail(o){
 
   el("detail").innerHTML=
    '<div class="breadcrumb"><button id="bc-home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Início</button><span class="sep">/</span><span>Operadoras</span><span class="sep">/</span><span class="current">'+esc(o.nome)+'</span></div>'+
-   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(statusInfo(o).bad?' <span class="status-badge lg">'+statusInfo(o).label+'</span>':'')+'</h1><div class="dh-meta">'+
+   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(function(){var si=statusInfo(o);return si.bad?' <span class="status-badge lg">'+si.label+(si.date?' · desde '+esc(si.date):'')+'</span>':'';})()+'</h1><div class="dh-meta">'+
      (isEmptyVal(o.ans)?'':'<span class="chip">ANS nº <b>'+esc(clean(o.ans))+'</b></span>')+
      '<span class="chip">Vigência da tabela: <b>'+fmtDate(o.vigencia)+'</b></span>'+
      '<span class="chip">Última atualização: <b>'+fmtDate(o.atualizacao)+'</b></span>'+
