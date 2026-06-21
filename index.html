@@ -230,6 +230,7 @@ function logoBg(op){
 }
 
 let DATA=[];
+let LAST_EDIT="";  // data/hora carimbada pelo script da planilha (aba META)
 
 function parseCSV(text){
   const rows=[];let row=[];let field="";let i=0;let q=false;const n=text.length;
@@ -301,7 +302,7 @@ function extraIndices(header){
     status: findRe(/\bSTATUS\b/),
     ans: findRe(/\bANS\b/),
     remocao: find(h=>h.indexOf("REMOCAO")>=0 && h.indexOf("PSIQ")<0),
-    remocaoPsiq: find(h=>h.indexOf("REMOCAO")>=0 && h.indexOf("PSIQ")>=0),
+    remocaoPsiq: find(h=>h.indexOf("PSIQ")>=0),
     servicos: find(h=>h.indexOf("SERVICOS")>=0 && h.indexOf("CONTRAT")>=0),
     prazoUrg: find(h=>h.indexOf("URGENCIA")>=0)
   };
@@ -419,7 +420,7 @@ function renderHome(){
   el("kpi-ativas").textContent=DATA.filter(o=>!statusInfo(o).bad).length;
   let max=null;
   DATA.forEach(o=>{const d=parseDate(o.atualizacao);if(d&&(!max||d>max))max=d;});
-  el("kpi-data").textContent=max?max.toLocaleDateString("pt-BR"):"—";
+  el("kpi-data").textContent=LAST_EDIT||(max?max.toLocaleDateString("pt-BR"):"—");
   renderGrid();
 }
 function matches(o,term){if(!term)return true;const t=term.toLowerCase();return Object.values(o).some(v=>String(v).toLowerCase().includes(t));}
@@ -478,10 +479,10 @@ function openDetail(o){
     portal:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg> '
   };
   const secRec=section("Recepção",false,svgUser(),[
-    ["Documentos obrigatórios para consulta",o.documentos],
+    ["Documentos Obrigatórios para atendimento",o.documentos],
     ["Serviços contratados",o.servicos],
     ["Remoção",o.remocao],
-    ["Remoção Psiquiatria",o.remocaoPsiq],
+    ["Regulação Psiquiátrica",o.remocaoPsiq],
     ["Prazo solicitação Urgência e Emergência",o.prazoUrg],
     ["Site da Operadora",o.site||o.logoLink],
     ["Portal de Elegibilidade",o.portal],
@@ -546,6 +547,24 @@ function goHome(){show("home");renderGrid();window.scrollTo({top:0,behavior:"smo
 el("q").addEventListener("input",()=>{ if(!el("detail").classList.contains("hidden"))goHome(); renderGrid(); });
 el("sort").addEventListener("change",renderGrid);
 
+// Le a data/hora carimbada pelo script (aba META) -> data da ultima edicao real.
+async function fetchLastEdit(){
+  try{
+    const m=CSV_URL.match(/\/d\/([^\/]+)/);
+    if(!m)return;
+    const url="https://docs.google.com/spreadsheets/d/"+m[1]+"/gviz/tq?tqx=out:csv&sheet=META&_cb="+Date.now();
+    const r=await fetch(url);
+    if(!r.ok)return;
+    const t=await r.text();
+    if(/^\s*<!doctype html|<html/i.test(t))return;
+    const rows=parseCSV(t);
+    for(let i=0;i<rows.length;i++){
+      const v=clean(rows[i][0]);
+      if(v && v.toUpperCase()!=="ATUALIZADO"){LAST_EDIT=v;break;}
+    }
+  }catch(e){}
+}
+
 async function load(){
   show("loading");
   try{
@@ -559,6 +578,7 @@ async function load(){
     if(!text||/^\s*<!doctype html|<html/i.test(text))throw new Error("A URL nao retornou CSV (provavelmente a planilha nao esta publica). Reveja o passo de publicacao no README.");
     DATA=buildRecords(text);
     if(!DATA.length)throw new Error("Nenhuma operadora identificada no CSV.");
+    LAST_EDIT="";await fetchLastEdit();
     const now=new Date().toLocaleString("pt-BR");
     el("foot").innerHTML="Fonte ao vivo: Google Sheets (CSV publicado) &mdash; <b>"+DATA.length+"</b> operadoras &middot; carregado em "+now+".<br>Clique em <b>Atualizar dados</b> para refletir alteracoes feitas na planilha.";
     show("home");renderHome();
