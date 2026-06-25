@@ -120,7 +120,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="appbar-inner">
     <div class="brand">
       <div class="logo" aria-hidden="true">
-        <img src="https://static.wixstatic.com/media/9d8fdb_ab7ceb1a9464415c86f8e7969bc9c3f9~mv2.png/v1/crop/x_0,y_295,w_1080,h_530/fill/w_210,h_101,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/NOVA%20BENE.png" alt="Bene" style="width:100%;height:100%;object-fit:contain;padding:6px">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7V3Z" fill="#fff"/></svg>
       </div>
       <div class="titles">
         <div class="hosp">Beneficência Portuguesa de Ribeirão Preto</div>
@@ -184,7 +184,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    ============================================================= */
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1cmNy4kp9dYF-g7i6Mcd9MSKVBLzPY30J-CwCDHhRyRo/gviz/tq?tqx=out:csv&gid=1918428897&headers=1";
 
-const COLS = ["nome","logoLink","vigencia","atualizacao","materialConsumo","opmeHospital","opmeOperadora","medComum","medRestrito","medManipulado","quimio","dietaParenteral","dietaEnteral","itensSimpro","itensBrasindice","hemoterapia","filme","sadt1","hon1","sadt2","hon2","pacotes","observacao","prazoFat","prazoGlosa","contatos","site","telefone","portal","documentos","usuario","senha","urgEmergPrazo"];
+const COLS = ["nome","logoLink","vigencia","atualizacao","materialConsumo","opmeHospital","opmeOperadora","medComum","medRestrito","medManipulado","quimio","dietaParenteral","dietaEnteral","itensSimpro","itensBrasindice","hemoterapia","filme","sadt1","hon1","sadt2","hon2","pacotes","observacao","prazoFat","prazoGlosa","contatos","site","telefone","portal","documentos","usuario","senha"];
 
 const PALETTE=["#1f7a4d","#e8772e","#2d6cdf","#8e44ad","#16a085","#c0392b","#2c7873","#d68910","#5b6dc8","#117a65","#a04000","#34699a"];
 
@@ -436,7 +436,7 @@ function openDetail(o){
     ["Itens não constantes no Brasíndice",o.itensBrasindice]
   ]);
   const secSadt=section("SADT, Honorários, Hemoterapia e Pacotes",false,svgPulse(),[
-    ["Hemoterapia (Pacca)",o.hemoterapia],
+    ["Hemoterapia",o.hemoterapia],
     ["Filme Radiológico",o.filme],
     ["SADT - 1ª Regra",o.sadt1],
     ["Honorários Médicos - 1ª Regra",o.hon1],
@@ -447,7 +447,6 @@ function openDetail(o){
   const secFat=section("Faturamento",true,svgDoc(),[
     ["Prazo de Envio de Faturamento",o.prazoFat],
     ["Prazo de Recurso de Glosa",o.prazoGlosa],
-    ["Urgência/Emergência - Prazo de Solicitação",o.urgEmergPrazo],
     ["Observações",o.observacao]
   ]);
 
