@@ -68,6 +68,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .op-logo{width:64px;height:64px;border-radius:16px;object-fit:contain;background:var(--white);border:1px solid var(--line);margin-bottom:13px}
 .op-logo.fallback{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;color:#fff;border:none}
 .op-logo.dark{background:#3a4452;border-color:#3a4452;padding:7px}
+.op-card.inactive{opacity:.72}
+.op-card.inactive .op-logo{filter:grayscale(.5)}
+.status-badge{position:absolute;top:10px;right:10px;background:#c0392b;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:20px;text-transform:uppercase;box-shadow:0 2px 6px rgba(192,57,43,.35)}
+.status-badge.lg{position:static;font-size:12px;padding:5px 12px;vertical-align:middle}
+.op-susp{font-size:11px;color:#c0392b;font-weight:600;margin-top:4px}
 .op-name{font-size:14.5px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:6px}
 .op-upd{font-size:11.5px;color:var(--muted)}
 .op-upd b{color:var(--green);font-weight:600}
@@ -195,17 +200,37 @@ const KNOWN_NAMES=["AFA ACADEMIA DA FORÇA AÉREA PIRASSUNUNGA - SP","AMPARA","A
 const KNOWN_SET={};KNOWN_NAMES.forEach(n=>KNOWN_SET[n]=1);
 function norm(s){return (s==null?"":String(s)).trim().toUpperCase().replace(/\s+/g," ");}
 
-// Convenios cujas logos tem escrita branca -> recebem fundo escuro por padrao.
-// Voce tambem pode controlar pela planilha: escreva "dark" depois do link da logo.
-const DARK_LOGO_NAMES=["NEW LEADER","UNIMED NORDESTE","UNIMED RIBEIRÃO PRETO","UNIMED RIBEIRAO PRETO","SERMED"];
-const DARK_SET={};DARK_LOGO_NAMES.forEach(n=>DARK_SET[n]=1);
-function wantsDark(op){
-  const s=(clean(op.logoLink)+" "+clean(op.site)).toLowerCase();
-  if(/(^|\s)(dark|escuro|fundo escuro)(\s|$)/.test(s))return true;
-  return !!DARK_SET[norm(op.nome)];
+// Cor de fundo do quadradinho da logo: escolha pela planilha.
+// Depois do link da logo, escreva um espaco e a cor desejada, por exemplo:
+//   https://site.com/logo.png dark      (fundo escuro)
+//   https://site.com/logo.png green     (verde institucional)
+//   https://site.com/logo.png #1f7a4d   (qualquer cor em codigo hex)
+// Palavras aceitas (PT ou EN): dark/escuro, preto/black, verde/green, azul/blue,
+// laranja/orange, vermelho/red, cinza/gray, branco/white.
+const BG_COLORS={
+  dark:"#3a4452", escuro:"#3a4452", preto:"#1a1d21", black:"#1a1d21",
+  verde:"#1f7a4d", green:"#1f7a4d", azul:"#2d6cdf", blue:"#2d6cdf",
+  laranja:"#e8772e", orange:"#e8772e", vermelho:"#c0392b", red:"#c0392b",
+  cinza:"#6b7280", gray:"#6b7280", grey:"#6b7280", branco:"#ffffff", white:"#ffffff"
+};
+function logoBg(op){
+  // pega somente o texto que vem DEPOIS do link (evita falso positivo em nomes/URLs)
+  function tail(cell){
+    cell=clean(cell);
+    const m=cell.match(/https?:\/\/\S+/i);
+    if(!m)return "";
+    return cell.slice(m.index+m[0].length).trim().toLowerCase();
+  }
+  const rest=(tail(op.logoLink)+" "+tail(op.site)).trim();
+  if(!rest)return null;
+  const hex=rest.match(/#([0-9a-f]{6}|[0-9a-f]{3})\b/i);
+  if(hex)return "#"+hex[1];
+  for(const k in BG_COLORS){ if(new RegExp("(^|\\s)"+k+"(\\s|$)").test(rest))return BG_COLORS[k]; }
+  return null;
 }
 
 let DATA=[];
+let LAST_EDIT="";  // data/hora carimbada pelo script da planilha (aba META)
 
 function parseCSV(text){
   const rows=[];let row=[];let field="";let i=0;let q=false;const n=text.length;
@@ -251,17 +276,36 @@ function buildRecords(text){
       const s=idxs[k], e=(k+1<idxs.length)?idxs[k+1]:flat.length;
       recs.push(flat.slice(s,e));
     }
-    return finalize(recs);
+    return finalize(recs,null);
   }
 
   let hIdx=rows.findIndex(r=>isHeaderName(r[0]));
   if(hIdx<0)hIdx=0;
+  const ex=extraIndices(rows[hIdx]);
   const dataRows=[];
   for(let r=hIdx+1;r<rows.length;r++){
     if(isClinicName(rows[r][0]))break;
     dataRows.push(rows[r]);
   }
-  return finalize(dataRows);
+  return finalize(dataRows,ex);
+}
+
+// Localiza as colunas NOVAS pelo nome do cabecalho (posicao livre, basta estarem
+// no fim da planilha). Acentos sao ignorados na comparacao.
+function normH(s){var t=clean(s).toUpperCase();var a="ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ",b="AAAAAEEEEIIIIOOOOOUUUUC",o="";for(var i=0;i<t.length;i++){var p=a.indexOf(t[i]);o+=p>=0?b[p]:t[i];}return o.replace(/\s+/g," ");}
+function extraIndices(header){
+  if(!header)return null;
+  const H=header.map(normH);
+  const findRe=re=>{for(let i=0;i<H.length;i++){if(re.test(H[i]))return i;}return -1;};
+  const find=fn=>{for(let i=0;i<H.length;i++){if(fn(H[i]))return i;}return -1;};
+  return {
+    status: findRe(/\bSTATUS\b/),
+    ans: findRe(/\bANS\b/),
+    remocao: find(h=>h.indexOf("REMOCAO")>=0 && h.indexOf("PSIQ")<0),
+    remocaoPsiq: find(h=>h.indexOf("PSIQ")>=0),
+    servicos: find(h=>h.indexOf("SERVICOS")>=0 && h.indexOf("CONTRAT")>=0),
+    prazoUrg: find(h=>h.indexOf("URGENCIA")>=0)
+  };
 }
 
 function datey(s){return /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(clean(s));}
@@ -275,7 +319,7 @@ function realign(r){
   }
   return r;
 }
-function finalize(dataRows){
+function finalize(dataRows,ex){
   const out=[];
   dataRows.forEach(raw=>{
     let r=realign(raw.slice());
@@ -283,9 +327,23 @@ function finalize(dataRows){
     if(!name)return;
     if(isClinicName(name)||isHeaderName(name))return;
     const o={};COLS.forEach((k,idx)=>o[k]=clean(r[idx]));
+    // colunas novas (localizadas pelo nome do cabecalho)
+    o.status      = (ex&&ex.status>=0)?clean(raw[ex.status]):"";
+    o.ans         = (ex&&ex.ans>=0)?clean(raw[ex.ans]):"";
+    o.remocao     = (ex&&ex.remocao>=0)?clean(raw[ex.remocao]):"";
+    o.remocaoPsiq = (ex&&ex.remocaoPsiq>=0)?clean(raw[ex.remocaoPsiq]):"";
+    o.servicos    = (ex&&ex.servicos>=0)?clean(raw[ex.servicos]):"";
+    o.prazoUrg    = (ex&&ex.prazoUrg>=0)?clean(raw[ex.prazoUrg]):"";
     out.push(o);
   });
   return out;
+}
+function statusInfo(o){
+  const s=clean(o.status);const up=s.toUpperCase();
+  const dm=s.match(/\d{1,2}\/\d{1,2}\/\d{2,4}/);const date=dm?dm[0]:"";
+  if(/SUSPEN/.test(up))return {bad:true,label:"SUSPENSO",verbo:"Suspenso",date:date};
+  if(/INATIV/.test(up))return {bad:true,label:"INATIVO",verbo:"Inativo",date:date};
+  return {bad:false,label:"",verbo:"",date:""};
 }
 
 function domainFrom(str){
@@ -321,10 +379,13 @@ function logoEl(op,size){
     if(size)d.style.cssText+=";width:"+size+"px;height:"+size+"px;font-size:"+(size*0.33)+"px";
     d.textContent=initials(op.nome);return d;
   };
-  const dk=wantsDark(op)?" dark":"";
+  const bg=logoBg(op);
   const img=document.createElement("img");
-  img.className="op-logo"+dk;img.alt=op.nome;img.loading="lazy";
-  if(size)img.style.cssText="width:"+size+"px;height:"+size+"px";
+  img.className="op-logo";img.alt=op.nome;img.loading="lazy";
+  let st="";
+  if(size)st+="width:"+size+"px;height:"+size+"px;";
+  if(bg)st+="background:"+bg+";border-color:"+bg+";padding:7px;";
+  if(st)img.style.cssText=st;
   if(direct){
     // link direto da imagem da logo -> usa exatamente como veio
     img.src=direct;
@@ -356,10 +417,10 @@ function show(id){["loading","error","home","detail"].forEach(x=>el(x).classList
 
 function renderHome(){
   el("kpi-total").textContent=DATA.length;
-  el("kpi-ativas").textContent=DATA.length;
+  el("kpi-ativas").textContent=DATA.filter(o=>!statusInfo(o).bad).length;
   let max=null;
   DATA.forEach(o=>{const d=parseDate(o.atualizacao);if(d&&(!max||d>max))max=d;});
-  el("kpi-data").textContent=max?max.toLocaleDateString("pt-BR"):"—";
+  el("kpi-data").textContent=LAST_EDIT||(max?max.toLocaleDateString("pt-BR"):"—");
   renderGrid();
 }
 function matches(o,term){if(!term)return true;const t=term.toLowerCase();return Object.values(o).some(v=>String(v).toLowerCase().includes(t));}
@@ -375,9 +436,12 @@ function renderGrid(){
   el("empty").classList.toggle("hidden",list.length>0);
   list.forEach(o=>{
     const c=document.createElement("div");c.className="op-card fade";
+    const st=statusInfo(o);
+    if(st.bad){c.classList.add("inactive");const b=document.createElement("span");b.className="status-badge";b.textContent=st.label;c.appendChild(b);}
     c.appendChild(logoEl(o,64));
     const nm=document.createElement("div");nm.className="op-name";nm.textContent=o.nome;c.appendChild(nm);
     const up=document.createElement("div");up.className="op-upd";up.innerHTML="Atualizado: <b>"+fmtDate(o.atualizacao)+"</b>";c.appendChild(up);
+    if(st.bad&&st.date){const sn=document.createElement("div");sn.className="op-susp";sn.textContent=st.verbo+" desde "+st.date;c.appendChild(sn);}
     c.onclick=()=>openDetail(o);
     g.appendChild(c);
   });
@@ -415,7 +479,11 @@ function openDetail(o){
     portal:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg> '
   };
   const secRec=section("Recepção",false,svgUser(),[
-    ["Documentos obrigatórios para consulta",o.documentos],
+    ["Documentos Obrigatórios para atendimento",o.documentos],
+    ["Serviços contratados",o.servicos],
+    ["Remoção",o.remocao],
+    ["Regulação Psiquiátrica",o.remocaoPsiq],
+    ["Prazo solicitação Urgência e Emergência",o.prazoUrg],
     ["Site da Operadora",o.site||o.logoLink],
     ["Portal de Elegibilidade",o.portal],
     ["Contatos (e-mail)",o.contatos]
@@ -452,7 +520,8 @@ function openDetail(o){
 
   el("detail").innerHTML=
    '<div class="breadcrumb"><button id="bc-home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Início</button><span class="sep">/</span><span>Operadoras</span><span class="sep">/</span><span class="current">'+esc(o.nome)+'</span></div>'+
-   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+'</h1><div class="dh-meta">'+
+   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(function(){var si=statusInfo(o);return si.bad?' <span class="status-badge lg">'+si.label+(si.date?' · desde '+esc(si.date):'')+'</span>':'';})()+'</h1><div class="dh-meta">'+
+     (isEmptyVal(o.ans)?'':'<span class="chip">ANS nº <b>'+esc(clean(o.ans))+'</b></span>')+
      '<span class="chip">Vigência da tabela: <b>'+fmtDate(o.vigencia)+'</b></span>'+
      '<span class="chip">Última atualização: <b>'+fmtDate(o.atualizacao)+'</b></span>'+
      linkChip("Telefone",o.telefone,ic.phone)+
@@ -478,6 +547,24 @@ function goHome(){show("home");renderGrid();window.scrollTo({top:0,behavior:"smo
 el("q").addEventListener("input",()=>{ if(!el("detail").classList.contains("hidden"))goHome(); renderGrid(); });
 el("sort").addEventListener("change",renderGrid);
 
+// Le a data/hora carimbada pelo script (aba META) -> data da ultima edicao real.
+async function fetchLastEdit(){
+  try{
+    const m=CSV_URL.match(/\/d\/([^\/]+)/);
+    if(!m)return;
+    const url="https://docs.google.com/spreadsheets/d/"+m[1]+"/gviz/tq?tqx=out:csv&sheet=META&_cb="+Date.now();
+    const r=await fetch(url);
+    if(!r.ok)return;
+    const t=await r.text();
+    if(/^\s*<!doctype html|<html/i.test(t))return;
+    const rows=parseCSV(t);
+    for(let i=0;i<rows.length;i++){
+      const v=clean(rows[i][0]);
+      if(v && v.toUpperCase()!=="ATUALIZADO"){LAST_EDIT=v;break;}
+    }
+  }catch(e){}
+}
+
 async function load(){
   show("loading");
   try{
@@ -491,6 +578,7 @@ async function load(){
     if(!text||/^\s*<!doctype html|<html/i.test(text))throw new Error("A URL nao retornou CSV (provavelmente a planilha nao esta publica). Reveja o passo de publicacao no README.");
     DATA=buildRecords(text);
     if(!DATA.length)throw new Error("Nenhuma operadora identificada no CSV.");
+    LAST_EDIT="";await fetchLastEdit();
     const now=new Date().toLocaleString("pt-BR");
     el("foot").innerHTML="Fonte ao vivo: Google Sheets (CSV publicado) &mdash; <b>"+DATA.length+"</b> operadoras &middot; carregado em "+now+".<br>Clique em <b>Atualizar dados</b> para refletir alteracoes feitas na planilha.";
     show("home");renderHome();
