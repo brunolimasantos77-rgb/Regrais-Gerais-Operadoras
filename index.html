@@ -30,7 +30,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .appbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.88);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line)}
 .appbar-inner{max-width:1280px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px}
 .brand{display:flex;align-items:center;gap:13px;min-width:0}
-.brand .logo{flex:none;width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(31,122,77,.28)}
+.brand .logo{flex:none;height:52px;width:auto;display:block}
 .brand .titles{min-width:0}
 .brand .hosp{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--green);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand .dash{font-size:17px;font-weight:700;color:var(--text);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -124,9 +124,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 <header class="appbar">
   <div class="appbar-inner">
     <div class="brand">
-      <div class="logo" aria-hidden="true">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7V3Z" fill="#fff"/></svg>
-      </div>
+      <img class="logo" src="https://static.wixstatic.com/media/9d8fdb_ab7ceb1a9464415c86f8e7969bc9c3f9~mv2.png/v1/crop/x_0,y_295,w_1080,h_530/fill/w_210,h_101,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/NOVA%20BENE.png" alt="Nova Benê - Complexo Hospitalar">
+
       <div class="titles">
         <div class="hosp">Beneficência Portuguesa de Ribeirão Preto</div>
         <div class="dash">Portal de Regras Gerais das Operadoras</div>
@@ -483,7 +482,7 @@ function openDetail(o){
     ["Serviços contratados",o.servicos],
     ["Remoção",o.remocao],
     ["Regulação Psiquiátrica",o.remocaoPsiq],
-    ["Prazo solicitação Urgência e Emergência",o.prazoUrg],
+    ["Urgência/Emergência Prazo de solicitação",o.prazoUrg],
     ["Site da Operadora",o.site||o.logoLink],
     ["Portal de Elegibilidade",o.portal],
     ["Contatos (e-mail)",o.contatos]
@@ -504,7 +503,7 @@ function openDetail(o){
     ["Itens não constantes no Brasíndice",o.itensBrasindice]
   ]);
   const secSadt=section("SADT, Honorários, Hemoterapia e Pacotes",false,svgPulse(),[
-    ["Hemoterapia",o.hemoterapia],
+    ["Hemoterapia (Pacca)",o.hemoterapia],
     ["Filme Radiológico",o.filme],
     ["SADT - 1ª Regra",o.sadt1],
     ["Honorários Médicos - 1ª Regra",o.hon1],
