@@ -73,6 +73,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .status-badge{position:absolute;top:10px;right:10px;background:#c0392b;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:20px;text-transform:uppercase;box-shadow:0 2px 6px rgba(192,57,43,.35)}
 .status-badge.lg{position:static;font-size:12px;padding:5px 12px;vertical-align:middle}
 .op-susp{font-size:11px;color:#c0392b;font-weight:600;margin-top:4px}
+.abramge-badge{position:absolute;top:10px;left:10px;background:#2d6cdf;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:20px;text-transform:uppercase;box-shadow:0 2px 6px rgba(45,108,223,.35)}
+.abramge-badge.lg{position:static;font-size:12px;padding:5px 12px;vertical-align:middle}
 .op-name{font-size:14.5px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:6px}
 .op-upd{font-size:11.5px;color:var(--muted)}
 .op-upd b{color:var(--green);font-weight:600}
@@ -303,7 +305,8 @@ function extraIndices(header){
     remocao: find(h=>h.indexOf("REMOCAO")>=0 && h.indexOf("PSIQ")<0),
     remocaoPsiq: find(h=>h.indexOf("PSIQ")>=0),
     servicos: find(h=>h.indexOf("SERVICOS")>=0 && h.indexOf("CONTRAT")>=0),
-    prazoUrg: find(h=>h.indexOf("URGENCIA")>=0)
+    prazoUrg: find(h=>h.indexOf("URGENCIA")>=0),
+    abramge: find(h=>h.indexOf("ABRAMGE")>=0)
   };
 }
 
@@ -333,9 +336,14 @@ function finalize(dataRows,ex){
     o.remocaoPsiq = (ex&&ex.remocaoPsiq>=0)?clean(raw[ex.remocaoPsiq]):"";
     o.servicos    = (ex&&ex.servicos>=0)?clean(raw[ex.servicos]):"";
     o.prazoUrg    = (ex&&ex.prazoUrg>=0)?clean(raw[ex.prazoUrg]):"";
+    o.abramge     = (ex&&ex.abramge>=0)?clean(raw[ex.abramge]):"";
     out.push(o);
   });
   return out;
+}
+function isAbramge(o){
+  const v=clean(o.abramge).toUpperCase();
+  return v==="SIM"||v==="S"||v==="X"||v==="ABRAMGE"||v==="1"||v==="TRUE";
 }
 function statusInfo(o){
   const s=clean(o.status);const up=s.toUpperCase();
@@ -406,8 +414,12 @@ function logoEl(op,size){
 function parseDate(s){
   const t=clean(s);if(!t)return null;
   const m=t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if(m)return new Date(+m[3],+m[1]-1,+m[2]);
-  return null;
+  if(!m)return null;
+  var a=+m[1], b=+m[2], y=+m[3], month, day;
+  if(a>12 && b<=12){ day=a; month=b; }   // primeiro numero > 12 => dia (formato dd/mm)
+  else { month=a; day=b; }               // padrao mm/dd (como a planilha costuma exportar)
+  if(month<1||month>12||day<1||day>31)return null;
+  return new Date(y,month-1,day);
 }
 function fmtDate(s){const d=parseDate(s);if(!d)return clean(s)||"—";return d.toLocaleDateString("pt-BR");}
 
@@ -437,6 +449,7 @@ function renderGrid(){
     const c=document.createElement("div");c.className="op-card fade";
     const st=statusInfo(o);
     if(st.bad){c.classList.add("inactive");const b=document.createElement("span");b.className="status-badge";b.textContent=st.label;c.appendChild(b);}
+    if(isAbramge(o)){const ab=document.createElement("span");ab.className="abramge-badge";ab.textContent="ABRAMGE";c.appendChild(ab);}
     c.appendChild(logoEl(o,64));
     const nm=document.createElement("div");nm.className="op-name";nm.textContent=o.nome;c.appendChild(nm);
     const up=document.createElement("div");up.className="op-upd";up.innerHTML="Atualizado: <b>"+fmtDate(o.atualizacao)+"</b>";c.appendChild(up);
@@ -519,7 +532,7 @@ function openDetail(o){
 
   el("detail").innerHTML=
    '<div class="breadcrumb"><button id="bc-home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Início</button><span class="sep">/</span><span>Operadoras</span><span class="sep">/</span><span class="current">'+esc(o.nome)+'</span></div>'+
-   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(function(){var si=statusInfo(o);return si.bad?' <span class="status-badge lg">'+si.label+(si.date?' · desde '+esc(si.date):'')+'</span>':'';})()+'</h1><div class="dh-meta">'+
+   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(function(){var si=statusInfo(o);return si.bad?' <span class="status-badge lg">'+si.label+(si.date?' · desde '+esc(si.date):'')+'</span>':'';})()+(isAbramge(o)?' <span class="abramge-badge lg">ABRAMGE</span>':'')+'</h1><div class="dh-meta">'+
      (isEmptyVal(o.ans)?'':'<span class="chip">ANS nº <b>'+esc(clean(o.ans))+'</b></span>')+
      '<span class="chip">Vigência da tabela: <b>'+fmtDate(o.vigencia)+'</b></span>'+
      '<span class="chip">Última atualização: <b>'+fmtDate(o.atualizacao)+'</b></span>'+
