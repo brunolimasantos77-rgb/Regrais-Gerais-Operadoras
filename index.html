@@ -306,7 +306,8 @@ function extraIndices(header){
     remocaoPsiq: find(h=>h.indexOf("PSIQ")>=0),
     servicos: find(h=>h.indexOf("SERVICOS")>=0 && h.indexOf("CONTRAT")>=0),
     prazoUrg: find(h=>h.indexOf("URGENCIA")>=0),
-    abramge: find(h=>h.indexOf("ABRAMGE")>=0)
+    abramge: find(h=>h.indexOf("ABRAMGE")>=0),
+    medicacaoPA: find(h=>h.indexOf("MEDICACAO")>=0)
   };
 }
 
@@ -337,6 +338,7 @@ function finalize(dataRows,ex){
     o.servicos    = (ex&&ex.servicos>=0)?clean(raw[ex.servicos]):"";
     o.prazoUrg    = (ex&&ex.prazoUrg>=0)?clean(raw[ex.prazoUrg]):"";
     o.abramge     = (ex&&ex.abramge>=0)?clean(raw[ex.abramge]):"";
+    o.medicacaoPA = (ex&&ex.medicacaoPA>=0)?clean(raw[ex.medicacaoPA]):"";
     out.push(o);
   });
   return out;
@@ -496,6 +498,7 @@ function openDetail(o){
     ["Remoção",o.remocao],
     ["Regulação Psiquiátrica",o.remocaoPsiq],
     ["Urgência/Emergência Prazo de solicitação",o.prazoUrg],
+    ["Medicação em PA",o.medicacaoPA],
     ["Site da Operadora",o.site||o.logoLink],
     ["Portal de Elegibilidade",o.portal],
     ["Contatos (e-mail)",o.contatos]
