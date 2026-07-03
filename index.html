@@ -52,6 +52,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .kpi .ic.o{background:var(--orange-soft);color:var(--orange)}
 .kpi .v{font-size:24px;font-weight:800;line-height:1.1;color:var(--text)}
 .kpi .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.viewtabs{display:inline-flex;background:var(--white);border:1px solid var(--line);border-radius:30px;padding:4px;gap:4px;margin-bottom:20px;box-shadow:var(--shadow)}
+.vtab{padding:8px 22px;border-radius:24px;font-size:14px;font-weight:700;color:var(--muted);transition:.15s;display:inline-flex;align-items:center;gap:7px}
+.vtab.active{background:var(--green);color:#fff}
+.vtab:not(.active):hover{color:var(--green)}
+.folder-banner{display:flex;align-items:center;gap:14px;background:linear-gradient(90deg,var(--orange-soft),var(--white));border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;margin-bottom:22px;box-shadow:var(--shadow);flex-wrap:wrap}
+.folder-banner .fb-ic{flex:none;width:42px;height:42px;border-radius:12px;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center}
+.folder-banner .fb-txt{flex:1;min-width:200px}
+.folder-banner .fb-title{font-size:14px;font-weight:700;color:var(--text)}
+.folder-banner .fb-path{font-size:12px;color:var(--muted);margin-top:2px;word-break:break-all;font-family:ui-monospace,Consolas,monospace}
 
 .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
 .toolbar h2{font-size:16px;font-weight:700}
@@ -156,13 +165,25 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   </div>
 
   <section id="home" class="hidden">
+    <div class="viewtabs" id="viewtabs">
+      <button class="vtab active" data-view="operadoras">Operadoras</button>
+      <button class="vtab" data-view="clinicas">Clínicas</button>
+    </div>
     <div class="kpis">
-      <div class="kpi"><div class="ic g"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div><div><div class="v" id="kpi-total">-</div><div class="l">Convenios cadastrados</div></div></div>
-      <div class="kpi"><div class="ic g"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></div><div><div class="v" id="kpi-ativas">-</div><div class="l">Operadoras ativas</div></div></div>
+      <div class="kpi"><div class="ic g"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div><div><div class="v" id="kpi-total">-</div><div class="l" id="kpi-total-l">Convenios cadastrados</div></div></div>
+      <div class="kpi"><div class="ic g"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></div><div><div class="v" id="kpi-ativas">-</div><div class="l" id="kpi-ativas-l">Operadoras ativas</div></div></div>
       <div class="kpi"><div class="ic o"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div><div class="v" id="kpi-data">-</div><div class="l">Ultima atualizacao do banco</div></div></div>
     </div>
+    <div class="folder-banner">
+      <div class="fb-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg></div>
+      <div class="fb-txt">
+        <div class="fb-title">Dúvidas? Consulte a pasta Comercial Compartilhamento</div>
+        <div class="fb-path" id="folder-path"></div>
+      </div>
+      <button id="copy-folder" class="btn primary">Copiar caminho</button>
+    </div>
     <div class="toolbar">
-      <h2>Operadoras credenciadas</h2>
+      <h2 id="grid-title">Operadoras credenciadas</h2>
       <span class="count" id="grid-count"></span>
       <div class="spacer"></div>
       <select id="sort">
@@ -189,6 +210,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    https://docs.google.com/spreadsheets/d/e/PUB_ID/pub?gid=GID&single=true&output=csv
    ============================================================= */
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1cmNy4kp9dYF-g7i6Mcd9MSKVBLzPY30J-CwCDHhRyRo/gviz/tq?tqx=out:csv&gid=1918428897&headers=1";
+const CLINICAS_SHEET = "CLÍNICAS (BENE)";  // nome exato da aba de clinicas na planilha
 
 const COLS = ["nome","logoLink","vigencia","atualizacao","materialConsumo","opmeHospital","opmeOperadora","medComum","medRestrito","medManipulado","quimio","dietaParenteral","dietaEnteral","itensSimpro","itensBrasindice","hemoterapia","filme","sadt1","hon1","sadt2","hon2","pacotes","observacao","prazoFat","prazoGlosa","contatos","site","telefone","portal","documentos","usuario","senha"];
 
@@ -231,6 +253,8 @@ function logoBg(op){
 }
 
 let DATA=[];
+let DATA_CLINICAS=[];       // lista de clinicas (aba propria)
+let VIEW="operadoras";      // aba atual: "operadoras" ou "clinicas"
 let LAST_EDIT="";  // data/hora carimbada pelo script da planilha (aba META)
 
 function parseCSV(text){
@@ -355,6 +379,54 @@ function statusInfo(o){
   return {bad:false,label:"",verbo:"",date:""};
 }
 
+// ----- Clinicas (aba propria, colunas diferentes) -----
+function clinicIndices(header){
+  const H=header.map(normH);
+  const find=fn=>{for(let i=0;i<H.length;i++){if(fn(H[i]))return i;}return -1;};
+  let nome=find(h=>h.indexOf("CLINIC")>=0);
+  if(nome<0)nome=0;
+  return {
+    nome:nome,
+    logo: find(h=>h.indexOf("LOGO")>=0),
+    vigencia: find(h=>h.indexOf("VIGENCIA")>=0),
+    atualizacao: find(h=>h.indexOf("ATUALIZA")>=0),
+    servicos: find(h=>h.indexOf("SERVICOS")>=0),
+    agendamento: find(h=>h.indexOf("AGENDAMENTO")>=0 && h.indexOf("CONTATO")<0),
+    contato: find(h=>h.indexOf("CONTATO")>=0),
+    identificacao: find(h=>h.indexOf("IDENTIFICA")>=0),
+    faturamento: find(h=>h.indexOf("FATURAMENTO")>=0),
+    status: find(h=>/\bSTATUS\b/.test(h))
+  };
+}
+function parseClinicas(text){
+  const rows=parseCSV(text);
+  if(rows.length<2)return [];
+  const ci=clinicIndices(rows[0]);
+  const out=[];
+  for(let r=1;r<rows.length;r++){
+    const row=rows[r];
+    const nome=clean(row[ci.nome]);
+    if(!nome)continue;
+    if(normH(nome).indexOf("CLINIC")>=0 && ci.vigencia>=0 && !clean(row[ci.vigencia]) && !clean(row[ci.servicos>=0?ci.servicos:0])) {/*possible header dup*/}
+    out.push({
+      nome:nome,
+      logoLink: ci.logo>=0?clean(row[ci.logo]):"",
+      site:"",
+      vigencia: ci.vigencia>=0?clean(row[ci.vigencia]):"",
+      atualizacao: ci.atualizacao>=0?clean(row[ci.atualizacao]):"",
+      servicos: ci.servicos>=0?clean(row[ci.servicos]):"",
+      agendamento: ci.agendamento>=0?clean(row[ci.agendamento]):"",
+      contato: ci.contato>=0?clean(row[ci.contato]):"",
+      identificacao: ci.identificacao>=0?clean(row[ci.identificacao]):"",
+      faturamento: ci.faturamento>=0?clean(row[ci.faturamento]):"",
+      status: ci.status>=0?clean(row[ci.status]):"",
+      abramge:""
+    });
+  }
+  return out;
+}
+function currentList(){return VIEW==="clinicas"?DATA_CLINICAS:DATA;}
+
 function domainFrom(str){
   const s=clean(str);
   const m=s.match(/https?:\/\/([^\/\s]+)/i);
@@ -428,11 +500,26 @@ function fmtDate(s){const d=parseDate(s);if(!d)return clean(s)||"—";return d.t
 const el=id=>document.getElementById(id);
 function show(id){["loading","error","home","detail"].forEach(x=>el(x).classList.toggle("hidden",x!==id));}
 
+function setView(v){
+  VIEW=v;
+  document.querySelectorAll(".vtab").forEach(b=>b.classList.toggle("active",b.getAttribute("data-view")===v));
+  show("home");renderHome();window.scrollTo({top:0,behavior:"smooth"});
+}
 function renderHome(){
-  el("kpi-total").textContent=DATA.length;
-  el("kpi-ativas").textContent=DATA.filter(o=>!statusInfo(o).bad).length;
+  const list=currentList();
+  if(VIEW==="clinicas"){
+    el("kpi-total-l").textContent="Clínicas cadastradas";
+    el("kpi-ativas-l").textContent="Clínicas ativas";
+    el("grid-title").textContent="Clínicas com contrato";
+  }else{
+    el("kpi-total-l").textContent="Convênios cadastrados";
+    el("kpi-ativas-l").textContent="Operadoras ativas";
+    el("grid-title").textContent="Operadoras credenciadas";
+  }
+  el("kpi-total").textContent=list.length;
+  el("kpi-ativas").textContent=list.filter(o=>!statusInfo(o).bad).length;
   let max=null;
-  DATA.forEach(o=>{const d=parseDate(o.atualizacao);if(d&&(!max||d>max))max=d;});
+  list.forEach(o=>{const d=parseDate(o.atualizacao);if(d&&(!max||d>max))max=d;});
   el("kpi-data").textContent=LAST_EDIT||(max?max.toLocaleDateString("pt-BR"):"—");
   renderGrid();
 }
@@ -441,22 +528,24 @@ function matches(o,term){if(!term)return true;const t=term.toLowerCase();return 
 function renderGrid(){
   const term=el("q").value.trim();
   const sort=el("sort").value;
-  let list=DATA.filter(o=>matches(o,term));
+  const full=currentList();
+  let list=full.filter(o=>matches(o,term));
   if(sort==="az")list.sort((a,b)=>a.nome.localeCompare(b.nome,"pt"));
   else list.sort((a,b)=>{const da=parseDate(a.atualizacao),db=parseDate(b.atualizacao);return (db?db.getTime():0)-(da?da.getTime():0);});
   const g=el("grid");g.innerHTML="";
-  el("grid-count").textContent=list.length+" de "+DATA.length;
+  el("grid-count").textContent=list.length+" de "+full.length;
   el("empty").classList.toggle("hidden",list.length>0);
+  const isClin=VIEW==="clinicas";
   list.forEach(o=>{
     const c=document.createElement("div");c.className="op-card fade";
     const st=statusInfo(o);
     if(st.bad){c.classList.add("inactive");const b=document.createElement("span");b.className="status-badge";b.textContent=st.label;c.appendChild(b);}
-    if(isAbramge(o)){const ab=document.createElement("span");ab.className="abramge-badge";ab.textContent="ABRAMGE";c.appendChild(ab);}
+    if(!isClin && isAbramge(o)){const ab=document.createElement("span");ab.className="abramge-badge";ab.textContent="ABRAMGE";c.appendChild(ab);}
     c.appendChild(logoEl(o,64));
     const nm=document.createElement("div");nm.className="op-name";nm.textContent=o.nome;c.appendChild(nm);
     const up=document.createElement("div");up.className="op-upd";up.innerHTML="Atualizado: <b>"+fmtDate(o.atualizacao)+"</b>";c.appendChild(up);
     if(st.bad&&st.date){const sn=document.createElement("div");sn.className="op-susp";sn.textContent=st.verbo+" desde "+st.date;c.appendChild(sn);}
-    c.onclick=()=>openDetail(o);
+    c.onclick=()=> isClin ? openDetailClinica(o) : openDetail(o);
     g.appendChild(c);
   });
 }
@@ -551,6 +640,29 @@ function openDetail(o){
   show("detail");
 }
 
+function openDetailClinica(o){
+  window.scrollTo({top:0,behavior:"smooth"});
+  const secAtend=section("Atendimento",false,svgUser(),[
+    ["Serviços contratados",o.servicos],
+    ["Agendamento",o.agendamento],
+    ["Contato para agendamentos",o.contato],
+    ["Identificação do paciente",o.identificacao]
+  ]);
+  const secFat=section("Faturamento e Pagamento",true,svgDoc(),[
+    ["Faturamento e Pagamento",o.faturamento]
+  ]);
+  el("detail").innerHTML=
+   '<div class="breadcrumb"><button id="bc-home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Início</button><span class="sep">/</span><span>Clínicas</span><span class="sep">/</span><span class="current">'+esc(o.nome)+'</span></div>'+
+   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(function(){var si=statusInfo(o);return si.bad?' <span class="status-badge lg">'+si.label+(si.date?' · desde '+esc(si.date):'')+'</span>':'';})()+'</h1><div class="dh-meta">'+
+     '<span class="chip">Vigência da tabela: <b>'+fmtDate(o.vigencia)+'</b></span>'+
+     '<span class="chip">Última atualização: <b>'+fmtDate(o.atualizacao)+'</b></span>'+
+   '</div></div></div>'+
+   secAtend+secFat;
+  el("detail").querySelector("#dh-logo").appendChild(logoEl(o,84));
+  el("bc-home").onclick=goHome;
+  show("detail");
+}
+
 function svgBox(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>';}
 function svgPill(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>';}
 function svgPulse(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>';}
@@ -561,6 +673,20 @@ function goHome(){show("home");renderGrid();window.scrollTo({top:0,behavior:"smo
 
 el("q").addEventListener("input",()=>{ if(!el("detail").classList.contains("hidden"))goHome(); renderGrid(); });
 el("sort").addEventListener("change",renderGrid);
+document.querySelectorAll(".vtab").forEach(b=>b.addEventListener("click",()=>setView(b.getAttribute("data-view"))));
+
+// Pasta da rede: mostra o caminho e copia para a area de transferencia (colar no Explorador)
+const PASTA_COMERCIAL="\\\\fileserver\\usuarios\\antigo\\Comercial compartilhamento";
+(function(){
+  var pEl=el("folder-path"); if(pEl)pEl.textContent=PASTA_COMERCIAL;
+  var btn=el("copy-folder"); if(!btn)return;
+  function feedback(){var o="Copiar caminho";btn.textContent="✓ Copiado! Cole no Explorador (Win+E)";setTimeout(function(){btn.textContent=o;},2800);}
+  function fallback(){try{var ta=document.createElement("textarea");ta.value=PASTA_COMERCIAL;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);feedback();}catch(e){alert("Copie o caminho:\n"+PASTA_COMERCIAL);}}
+  btn.onclick=function(){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(PASTA_COMERCIAL).then(feedback,fallback);}
+    else fallback();
+  };
+})();
 
 // Le a data/hora carimbada pelo script (aba META) -> data da ultima edicao real.
 async function fetchLastEdit(){
@@ -580,6 +706,19 @@ async function fetchLastEdit(){
   }catch(e){}
 }
 
+async function fetchClinicas(){
+  try{
+    const m=CSV_URL.match(/\/d\/([^\/]+)/);
+    if(!m)return;
+    const url="https://docs.google.com/spreadsheets/d/"+m[1]+"/gviz/tq?tqx=out:csv&sheet="+encodeURIComponent(CLINICAS_SHEET)+"&headers=1&_cb="+Date.now();
+    const r=await fetch(url);
+    if(!r.ok)return;
+    const t=await r.text();
+    if(/^\s*<!doctype html|<html/i.test(t))return;
+    DATA_CLINICAS=parseClinicas(t);
+  }catch(e){}
+}
+
 async function load(){
   show("loading");
   try{
@@ -594,6 +733,7 @@ async function load(){
     DATA=buildRecords(text);
     if(!DATA.length)throw new Error("Nenhuma operadora identificada no CSV.");
     LAST_EDIT="";await fetchLastEdit();
+    DATA_CLINICAS=[];await fetchClinicas();
     const now=new Date().toLocaleString("pt-BR");
     el("foot").innerHTML="Fonte ao vivo: Google Sheets (CSV publicado) &mdash; <b>"+DATA.length+"</b> operadoras &middot; carregado em "+now+".<br>Clique em <b>Atualizar dados</b> para refletir alteracoes feitas na planilha.";
     show("home");renderHome();
