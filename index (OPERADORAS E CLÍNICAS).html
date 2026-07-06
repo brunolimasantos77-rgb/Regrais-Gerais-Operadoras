@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Regras Gerais das Operadoras</title>
+<style>
+:root{
+  color-scheme: light;
+  --green:#1f7a4d;
+  --green-dark:#155c39;
+  --green-soft:#e8f3ed;
+  --orange:#e8772e;
+  --orange-soft:#fdeede;
+  --white:#ffffff;
+  --bg:#f4f6f5;
+  --card:#ffffff;
+  --text:#2c3338;
+  --muted:#8a949c;
+  --line:#e7ebe9;
+  --shadow:0 1px 3px rgba(16,40,30,.06),0 6px 20px rgba(16,40,30,.06);
+  --shadow-hover:0 4px 12px rgba(16,40,30,.10),0 14px 36px rgba(16,40,30,.12);
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--green);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+.appbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.88);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line)}
+.appbar-inner{max-width:1280px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.brand .logo{flex:none;height:52px;width:auto;display:block}
+.brand .titles{min-width:0}
+.brand .hosp{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--green);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .dash{font-size:17px;font-weight:700;color:var(--text);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search{margin-left:auto;position:relative;flex:1;max-width:420px}
+.search input{width:100%;padding:11px 14px 11px 40px;border:1px solid var(--line);border-radius:30px;background:var(--white);font-size:14px;color:var(--text);transition:.18s box-shadow,.18s border-color}
+.search input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
+
+.wrap{max-width:1280px;margin:0 auto;padding:26px 24px 60px}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:18px;flex-wrap:wrap}
+.breadcrumb button{color:var(--green);font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:5px;padding:0}
+.breadcrumb .sep{color:#cdd4d0}
+.breadcrumb .current{color:var(--text);font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:26px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:15px}
+.kpi .ic{flex:none;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center}
+.kpi .ic.g{background:var(--green-soft);color:var(--green)}
+.kpi .ic.o{background:var(--orange-soft);color:var(--orange)}
+.kpi .v{font-size:24px;font-weight:800;line-height:1.1;color:var(--text)}
+.kpi .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.viewtabs{display:inline-flex;background:var(--white);border:1px solid var(--line);border-radius:30px;padding:4px;gap:4px;margin-bottom:20px;box-shadow:var(--shadow)}
+.vtab{padding:8px 22px;border-radius:24px;font-size:14px;font-weight:700;color:var(--muted);transition:.15s;display:inline-flex;align-items:center;gap:7px}
+.vtab.active{background:var(--green);color:#fff}
+.vtab:not(.active):hover{color:var(--green)}
+.folder-banner{display:flex;align-items:center;gap:14px;background:linear-gradient(90deg,var(--orange-soft),var(--white));border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;margin-bottom:22px;box-shadow:var(--shadow);flex-wrap:wrap}
+.folder-banner .fb-ic{flex:none;width:42px;height:42px;border-radius:12px;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center}
+.folder-banner .fb-txt{flex:1;min-width:200px}
+.folder-banner .fb-title{font-size:14px;font-weight:700;color:var(--text)}
+.folder-banner .fb-path{font-size:12px;color:var(--muted);margin-top:2px;word-break:break-all;font-family:ui-monospace,Consolas,monospace}
+
+.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.toolbar h2{font-size:16px;font-weight:700}
+.toolbar .count{font-size:12.5px;color:var(--muted);background:var(--white);border:1px solid var(--line);padding:3px 10px;border-radius:20px}
+.toolbar .spacer{flex:1}
+.toolbar select{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--white);color:var(--text);font-size:13px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:16px}
+.op-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:transform .16s,box-shadow .16s,border-color .16s;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden}
+.op-card:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--green),var(--orange));opacity:0;transition:.16s}
+.op-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:#d9e4dd}
+.op-card:hover:before{opacity:1}
+.op-card:active{transform:translateY(-1px)}
+.op-logo{width:64px;height:64px;border-radius:16px;object-fit:contain;background:var(--white);border:1px solid var(--line);margin-bottom:13px}
+.op-logo.fallback{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;color:#fff;border:none}
+.op-logo.dark{background:#3a4452;border-color:#3a4452;padding:7px}
+.op-card.inactive{opacity:.72}
+.op-card.inactive .op-logo{filter:grayscale(.5)}
+.status-badge{position:absolute;top:10px;right:10px;background:#c0392b;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:20px;text-transform:uppercase;box-shadow:0 2px 6px rgba(192,57,43,.35)}
+.status-badge.lg{position:static;font-size:12px;padding:5px 12px;vertical-align:middle}
+.op-susp{font-size:11px;color:#c0392b;font-weight:600;margin-top:4px}
+.abramge-badge{position:absolute;top:10px;left:10px;background:#2d6cdf;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:20px;text-transform:uppercase;box-shadow:0 2px 6px rgba(45,108,223,.35)}
+.abramge-badge.lg{position:static;font-size:12px;padding:5px 12px;vertical-align:middle}
+.op-name{font-size:14.5px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:6px}
+.op-upd{font-size:11.5px;color:var(--muted)}
+.op-upd b{color:var(--green);font-weight:600}
+
+.detail-head{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:22px;display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.detail-head .op-logo{width:84px;height:84px;margin:0}
+.dh-main{min-width:200px;flex:1}
+.dh-main h1{font-size:23px;font-weight:800;line-height:1.15;margin-bottom:10px}
+.dh-meta{display:flex;gap:10px;flex-wrap:wrap}
+.chip{font-size:12.5px;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:5px 12px;color:var(--text);display:inline-flex;align-items:center;gap:6px}
+.chip b{color:var(--green);font-weight:700}
+.dh-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{padding:9px 15px;border-radius:11px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:7px;transition:.15s;border:1px solid var(--line);background:var(--white);color:var(--text)}
+.btn:hover{border-color:var(--green);color:var(--green)}
+.btn.primary{background:var(--green);color:#fff;border-color:var(--green)}
+.btn.primary:hover{background:var(--green-dark);color:#fff}
+.btn.disabled{opacity:.45;pointer-events:none}
+
+.section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}
+.section-h{display:flex;align-items:center;gap:11px;padding:16px 22px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--green-soft),transparent)}
+.section-h .si{width:34px;height:34px;border-radius:10px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.section-h.alt .si{background:var(--orange)}
+.section-h.alt{background:linear-gradient(90deg,var(--orange-soft),transparent)}
+.section-h h3{font-size:15px;font-weight:700}
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--line)}
+.rule{background:var(--card);padding:15px 20px}
+.rule .rl{font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.rule .rv{font-size:14px;color:var(--text);line-height:1.5;word-break:break-word;white-space:pre-line}
+.rule .rv.empty{color:#b3bcb6;font-style:italic;font-weight:500}
+.rule .rv a{font-weight:600;word-break:break-all}
+
+.state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center;color:var(--muted)}
+.spinner{width:42px;height:42px;border:4px solid var(--green-soft);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.state h3{color:var(--text);font-size:16px;margin-bottom:6px}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hidden{display:none!important}
+
+@media(max-width:680px){
+  .kpis{grid-template-columns:1fr}
+  .search{max-width:none;order:3;flex-basis:100%;margin-left:0}
+  .appbar-inner{flex-wrap:wrap}
+}
+.footer-note{margin-top:30px;font-size:12px;color:var(--muted);text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="brand">
+      <img class="logo" src="https://static.wixstatic.com/media/9d8fdb_ab7ceb1a9464415c86f8e7969bc9c3f9~mv2.png/v1/crop/x_0,y_295,w_1080,h_530/fill/w_210,h_101,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/NOVA%20BENE.png" alt="Nova Benê - Complexo Hospitalar">
+
+      <div class="titles">
+        <div class="hosp">Beneficência Portuguesa de Ribeirão Preto</div>
+        <div class="dash">Portal de Regras Gerais das Operadoras</div>
+      </div>
+    </div>
+    <div class="search">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+      <input id="q" type="text" placeholder="Pesquisar operadora, telefone, palavra-chave, observacao..." autocomplete="off">
+    </div>
+    <button id="reload-btn" class="btn" title="Recarregar dados da planilha" style="flex:none">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.5 2.7L3 8"/><path d="M3 3v5h5"/></svg>
+      Atualizar dados
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="loading" class="state">
+    <div class="spinner"></div>
+    <h3>Carregando dados da planilha...</h3>
+    <p>Regras Gerais Operadoras &middot; Google Sheets</p>
+  </div>
+  <div id="error" class="state hidden">
+    <h3>Nao foi possivel carregar a planilha</h3>
+    <p id="error-msg"></p>
+  </div>
+
+  <section id="home" class="hidden">
+    <div class="viewtabs" id="viewtabs">
+      <button class="vtab active" data-view="operadoras">Operadoras</button>
+      <button class="vtab" data-view="clinicas">Clínicas</button>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="ic g"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div><div><div class="v" id="kpi-total">-</div><div class="l" id="kpi-total-l">Convenios cadastrados</div></div></div>
+      <div class="kpi"><div class="ic g"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></div><div><div class="v" id="kpi-ativas">-</div><div class="l" id="kpi-ativas-l">Operadoras ativas</div></div></div>
+      <div class="kpi"><div class="ic o"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div><div class="v" id="kpi-data">-</div><div class="l">Ultima atualizacao do banco</div></div></div>
+    </div>
+    <div class="folder-banner">
+      <div class="fb-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg></div>
+      <div class="fb-txt">
+        <div class="fb-title">Dúvidas? Consulte a pasta Comercial Compartilhamento</div>
+        <div class="fb-path" id="folder-path"></div>
+      </div>
+      <button id="copy-folder" class="btn primary">Copiar caminho</button>
+    </div>
+    <div class="toolbar">
+      <h2 id="grid-title">Operadoras credenciadas</h2>
+      <span class="count" id="grid-count"></span>
+      <div class="spacer"></div>
+      <select id="sort">
+        <option value="az">Ordem alfabetica</option>
+        <option value="recent">Atualizacao mais recente</option>
+      </select>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div id="empty" class="state hidden"><h3>Nenhuma operadora encontrada</h3><p>Ajuste sua pesquisa.</p></div>
+  </section>
+
+  <section id="detail" class="hidden"></section>
+
+  <div class="footer-note" id="foot"></div>
+</main>
+
+<script>
+/* =============================================================
+   CONFIGURACAO  ->  cole aqui a URL do CSV publicado do Sheet.
+   Veja o README.md (passo a passo) para gerar esta URL.
+   Formato gviz (recomendado, exige Sheet com link de visualizacao publico):
+   https://docs.google.com/spreadsheets/d/ID_DO_SHEET/gviz/tq?tqx=out:csv&gid=GID
+   Formato "Publicar na web":
+   https://docs.google.com/spreadsheets/d/e/PUB_ID/pub?gid=GID&single=true&output=csv
+   ============================================================= */
+const CSV_URL = "https://docs.google.com/spreadsheets/d/1cmNy4kp9dYF-g7i6Mcd9MSKVBLzPY30J-CwCDHhRyRo/gviz/tq?tqx=out:csv&gid=1918428897&headers=1";
+const CLINICAS_SHEET = "CLÍNICAS (BENE)";  // nome exato da aba de clinicas na planilha
+
+const COLS = ["nome","logoLink","vigencia","atualizacao","materialConsumo","opmeHospital","opmeOperadora","medComum","medRestrito","medManipulado","quimio","dietaParenteral","dietaEnteral","itensSimpro","itensBrasindice","hemoterapia","filme","sadt1","hon1","sadt2","hon2","pacotes","observacao","prazoFat","prazoGlosa","contatos","site","telefone","portal","documentos","usuario","senha"];
+
+const PALETTE=["#1f7a4d","#e8772e","#2d6cdf","#8e44ad","#16a085","#c0392b","#2c7873","#d68910","#5b6dc8","#117a65","#a04000","#34699a"];
+
+// Roster of operadoras used as record anchors when the source comes back as a
+// single line (no row breaks). Edits to rule VALUES update live; if a new
+// operadora is added to the sheet, include its name here.
+const KNOWN_NAMES=["AFA ACADEMIA DA FORÇA AÉREA PIRASSUNUNGA - SP","AMPARA","APAS","ASSEFAZ","BLUE SAUDE","BRADESCO SAUDE OPERADORA","CABESP","CASSI","DONA BALBINA","ECONOMUS","FUSEX BAPAR RP","GAMA SAUDE","GEAP","IAMSPE","NEW LEADER","NOSAMED","SANTA CASA DE BATATAIS","SANTA CASA DE TAQUARITINGA","SASSOM","SAVISA","SERMED","SISTEMA VIDA","SUL AMÉRICA","SUL AMERICA","UNIMED NORDESTE","UNIMED RIBEIRÃO PRETO","UNIMED RIBEIRAO PRETO","UNIVIDA","VIVEST","VARGEM GRANDE"];
+const KNOWN_SET={};KNOWN_NAMES.forEach(n=>KNOWN_SET[n]=1);
+function norm(s){return (s==null?"":String(s)).trim().toUpperCase().replace(/\s+/g," ");}
+
+// Cor de fundo do quadradinho da logo: escolha pela planilha.
+// Depois do link da logo, escreva um espaco e a cor desejada, por exemplo:
+//   https://site.com/logo.png dark      (fundo escuro)
+//   https://site.com/logo.png green     (verde institucional)
+//   https://site.com/logo.png #1f7a4d   (qualquer cor em codigo hex)
+// Palavras aceitas (PT ou EN): dark/escuro, preto/black, verde/green, azul/blue,
+// laranja/orange, vermelho/red, cinza/gray, branco/white.
+const BG_COLORS={
+  dark:"#3a4452", escuro:"#3a4452", preto:"#1a1d21", black:"#1a1d21",
+  verde:"#1f7a4d", green:"#1f7a4d", azul:"#2d6cdf", blue:"#2d6cdf",
+  laranja:"#e8772e", orange:"#e8772e", vermelho:"#c0392b", red:"#c0392b",
+  cinza:"#6b7280", gray:"#6b7280", grey:"#6b7280", branco:"#ffffff", white:"#ffffff"
+};
+function logoBg(op){
+  // pega somente o texto que vem DEPOIS do link (evita falso positivo em nomes/URLs)
+  function tail(cell){
+    cell=clean(cell);
+    const m=cell.match(/https?:\/\/\S+/i);
+    if(!m)return "";
+    return cell.slice(m.index+m[0].length).trim().toLowerCase();
+  }
+  const rest=(tail(op.logoLink)+" "+tail(op.site)).trim();
+  if(!rest)return null;
+  const hex=rest.match(/#([0-9a-f]{6}|[0-9a-f]{3})\b/i);
+  if(hex)return "#"+hex[1];
+  for(const k in BG_COLORS){ if(new RegExp("(^|\\s)"+k+"(\\s|$)").test(rest))return BG_COLORS[k]; }
+  return null;
+}
+
+let DATA=[];
+let DATA_CLINICAS=[];       // lista de clinicas (aba propria)
+let VIEW="operadoras";      // aba atual: "operadoras" ou "clinicas"
+let LAST_EDIT="";  // data/hora carimbada pelo script da planilha (aba META)
+
+function parseCSV(text){
+  const rows=[];let row=[];let field="";let i=0;let q=false;const n=text.length;
+  while(i<n){
+    const c=text[i];
+    if(q){
+      if(c==='"'){ if(text[i+1]==='"'){field+='"';i+=2;continue;} q=false;i++;continue; }
+      field+=c;i++;continue;
+    }
+    if(c==='"'){q=true;i++;continue;}
+    if(c===','){row.push(field);field="";i++;continue;}
+    if(c==='\n'||c==='\r'){
+      if(c==='\r'&&text[i+1]==='\n')i++;
+      row.push(field);field="";rows.push(row);row=[];i++;continue;
+    }
+    field+=c;i++;
+  }
+  row.push(field);rows.push(row);
+  return rows;
+}
+
+function clean(s){return (s==null?"":String(s)).trim();}
+function isEmptyVal(s){const t=clean(s);return t===""||t==="-"||t==="–";}
+function isHeaderName(s){const u=clean(s).toUpperCase();return u.indexOf("CONVÊNIO")>=0||u.indexOf("CONVENIO")>=0;}
+function isClinicName(s){const u=clean(s).toUpperCase();return u.indexOf("CLÍNICA")>=0||u.indexOf("CLINICA")>=0||u.indexOf("CLINÍCA")>=0;}
+
+function buildRecords(text){
+  let rows=parseCSV(text);
+
+  // Source delivered as a single line (no row breaks): split by name anchors.
+  if(rows.length<6){
+    const flat=rows.flat();
+    const idxs=[];
+    flat.forEach((v,i)=>{
+      if(!KNOWN_SET[norm(v)])return;
+      // ignore anchors too close to the previous one (e.g. a name repeated in
+      // its own logo column, as with IAMSPE) — real records are long.
+      if(idxs.length && i-idxs[idxs.length-1]<5)return;
+      idxs.push(i);
+    });
+    const recs=[];
+    for(let k=0;k<idxs.length;k++){
+      const s=idxs[k], e=(k+1<idxs.length)?idxs[k+1]:flat.length;
+      recs.push(flat.slice(s,e));
+    }
+    return finalize(recs,null);
+  }
+
+  let hIdx=rows.findIndex(r=>isHeaderName(r[0]));
+  if(hIdx<0)hIdx=0;
+  const ex=extraIndices(rows[hIdx]);
+  const dataRows=[];
+  for(let r=hIdx+1;r<rows.length;r++){
+    if(isClinicName(rows[r][0]))break;
+    dataRows.push(rows[r]);
+  }
+  return finalize(dataRows,ex);
+}
+
+// Localiza as colunas NOVAS pelo nome do cabecalho (posicao livre, basta estarem
+// no fim da planilha). Acentos sao ignorados na comparacao.
+function normH(s){var t=clean(s).toUpperCase();var a="ÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ",b="AAAAAEEEEIIIIOOOOOUUUUC",o="";for(var i=0;i<t.length;i++){var p=a.indexOf(t[i]);o+=p>=0?b[p]:t[i];}return o.replace(/\s+/g," ");}
+function extraIndices(header){
+  if(!header)return null;
+  const H=header.map(normH);
+  const findRe=re=>{for(let i=0;i<H.length;i++){if(re.test(H[i]))return i;}return -1;};
+  const find=fn=>{for(let i=0;i<H.length;i++){if(fn(H[i]))return i;}return -1;};
+  return {
+    status: findRe(/\bSTATUS\b/),
+    ans: findRe(/\bANS\b/),
+    remocao: find(h=>h.indexOf("REMOCAO")>=0 && h.indexOf("PSIQ")<0),
+    remocaoPsiq: find(h=>h.indexOf("PSIQ")>=0),
+    servicos: find(h=>h.indexOf("SERVICOS")>=0 && h.indexOf("CONTRAT")>=0),
+    prazoUrg: find(h=>h.indexOf("URGENCIA")>=0),
+    abramge: find(h=>h.indexOf("ABRAMGE")>=0),
+    medicacaoPA: find(h=>h.indexOf("MEDICACAO")>=0)
+  };
+}
+
+function datey(s){return /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(clean(s));}
+function realign(r){
+  // Some rows in the source export are left-shifted by one cell (a missing
+  // logo/date placeholder), pushing a rule value into the "atualizacao" slot.
+  // Detect: neither the vigencia nor atualizacao slot is a date, yet the
+  // atualizacao slot holds a non-empty (rule-like) value -> reinsert a blank.
+  if(r.length>4 && clean(r[3])!=="" && !datey(r[2]) && !datey(r[3])){
+    return [r[0],""].concat(r.slice(1));
+  }
+  return r;
+}
+function finalize(dataRows,ex){
+  const out=[];
+  dataRows.forEach(raw=>{
+    let r=realign(raw.slice());
+    const name=clean(r[0]);
+    if(!name)return;
+    if(isClinicName(name)||isHeaderName(name))return;
+    const o={};COLS.forEach((k,idx)=>o[k]=clean(r[idx]));
+    // colunas novas (localizadas pelo nome do cabecalho)
+    o.status      = (ex&&ex.status>=0)?clean(raw[ex.status]):"";
+    o.ans         = (ex&&ex.ans>=0)?clean(raw[ex.ans]):"";
+    o.remocao     = (ex&&ex.remocao>=0)?clean(raw[ex.remocao]):"";
+    o.remocaoPsiq = (ex&&ex.remocaoPsiq>=0)?clean(raw[ex.remocaoPsiq]):"";
+    o.servicos    = (ex&&ex.servicos>=0)?clean(raw[ex.servicos]):"";
+    o.prazoUrg    = (ex&&ex.prazoUrg>=0)?clean(raw[ex.prazoUrg]):"";
+    o.abramge     = (ex&&ex.abramge>=0)?clean(raw[ex.abramge]):"";
+    o.medicacaoPA = (ex&&ex.medicacaoPA>=0)?clean(raw[ex.medicacaoPA]):"";
+    out.push(o);
+  });
+  return out;
+}
+function isAbramge(o){
+  const v=clean(o.abramge).toUpperCase();
+  return v==="SIM"||v==="S"||v==="X"||v==="ABRAMGE"||v==="1"||v==="TRUE";
+}
+function statusInfo(o){
+  const s=clean(o.status);const up=s.toUpperCase();
+  const dm=s.match(/\d{1,2}\/\d{1,2}\/\d{2,4}/);const date=dm?dm[0]:"";
+  if(/SUSPEN/.test(up))return {bad:true,label:"SUSPENSO",verbo:"Suspenso",date:date};
+  if(/INATIV/.test(up))return {bad:true,label:"INATIVO",verbo:"Inativo",date:date};
+  return {bad:false,label:"",verbo:"",date:""};
+}
+
+// ----- Clinicas (aba propria, colunas diferentes) -----
+function clinicIndices(header){
+  const H=header.map(normH);
+  const find=fn=>{for(let i=0;i<H.length;i++){if(fn(H[i]))return i;}return -1;};
+  let nome=find(h=>h.indexOf("CLINIC")>=0);
+  if(nome<0)nome=0;
+  return {
+    nome:nome,
+    logo: find(h=>h.indexOf("LOGO")>=0),
+    vigencia: find(h=>h.indexOf("VIGENCIA")>=0),
+    atualizacao: find(h=>h.indexOf("ATUALIZA")>=0),
+    servicos: find(h=>h.indexOf("SERVICOS")>=0),
+    agendamento: find(h=>h.indexOf("AGENDAMENTO")>=0 && h.indexOf("CONTATO")<0),
+    contato: find(h=>h.indexOf("CONTATO")>=0 && h.indexOf("AGENDAMENTO")>=0),
+    contatos: find(h=>h.indexOf("CONTATO")>=0 && h.indexOf("AGENDAMENTO")<0),
+    telefone: find(h=>h.indexOf("TELEFONE")>=0),
+    anatomo: find(h=>h.indexOf("ANATOMO")>=0),
+    identificacao: find(h=>h.indexOf("IDENTIFICA")>=0),
+    faturamento: find(h=>h.indexOf("FATURAMENTO")>=0),
+    envioNf: find(h=>h.indexOf("ENVIO")>=0),
+    prazoFat: find(h=>h.indexOf("PRAZO")>=0),
+    pagamento: find(h=>h.indexOf("PAGAMENTO")>=0 && h.indexOf("FATURAMENTO")<0),
+    dadosBanc: find(h=>h.indexOf("BANCARIO")>=0),
+    status: find(h=>/\bSTATUS\b/.test(h))
+  };
+}
+function parseClinicas(text){
+  const rows=parseCSV(text);
+  if(rows.length<2)return [];
+  const ci=clinicIndices(rows[0]);
+  const out=[];
+  for(let r=1;r<rows.length;r++){
+    const row=rows[r];
+    const nome=clean(row[ci.nome]);
+    if(!nome)continue;
+    if(normH(nome).indexOf("CLINIC")>=0 && ci.vigencia>=0 && !clean(row[ci.vigencia]) && !clean(row[ci.servicos>=0?ci.servicos:0])) {/*possible header dup*/}
+    out.push({
+      nome:nome,
+      logoLink: ci.logo>=0?clean(row[ci.logo]):"",
+      site:"",
+      vigencia: ci.vigencia>=0?clean(row[ci.vigencia]):"",
+      atualizacao: ci.atualizacao>=0?clean(row[ci.atualizacao]):"",
+      servicos: ci.servicos>=0?clean(row[ci.servicos]):"",
+      agendamento: ci.agendamento>=0?clean(row[ci.agendamento]):"",
+      contato: ci.contato>=0?clean(row[ci.contato]):"",
+      contatos: ci.contatos>=0?clean(row[ci.contatos]):"",
+      telefone: ci.telefone>=0?clean(row[ci.telefone]):"",
+      anatomo: ci.anatomo>=0?clean(row[ci.anatomo]):"",
+      identificacao: ci.identificacao>=0?clean(row[ci.identificacao]):"",
+      faturamento: ci.faturamento>=0?clean(row[ci.faturamento]):"",
+      envioNf: ci.envioNf>=0?clean(row[ci.envioNf]):"",
+      prazoFat: ci.prazoFat>=0?clean(row[ci.prazoFat]):"",
+      pagamento: ci.pagamento>=0?clean(row[ci.pagamento]):"",
+      dadosBanc: ci.dadosBanc>=0?clean(row[ci.dadosBanc]):"",
+      status: ci.status>=0?clean(row[ci.status]):"",
+      abramge:""
+    });
+  }
+  return out;
+}
+function currentList(){return VIEW==="clinicas"?DATA_CLINICAS:DATA;}
+
+function domainFrom(str){
+  const s=clean(str);
+  const m=s.match(/https?:\/\/([^\/\s]+)/i);
+  if(m)return m[1].replace(/^www\./,"");
+  return null;
+}
+function directImg(str){
+  const s=clean(str);
+  // aceita URLs com virgula (ex.: links do Wix). Para so antes de um espaco.
+  const m=s.match(/https?:\/\/[^\s"']+/i);
+  if(m && /\.(png|jpe?g|svg|webp|gif)(\?.*)?$/i.test(m[0]))return m[0];
+  return null;
+}
+function initials(name){
+  const w=name.replace(/[^A-Za-zÀ-ÿ0-9 ]/g,"").trim().split(/\s+/).filter(Boolean);
+  if(!w.length)return "?";
+  if(w.length===1)return w[0].slice(0,2).toUpperCase();
+  return (w[0][0]+w[1][0]).toUpperCase();
+}
+function colorFor(name){let h=0;for(let i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))>>>0;return PALETTE[h%PALETTE.length];}
+function shade(hex,p){let n=parseInt(hex.slice(1),16);let r=(n>>16)+p*2.55,g=((n>>8)&255)+p*2.55,b=(n&255)+p*2.55;r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));return"#"+((1<<24)+((r|0)<<16)+((g|0)<<8)+(b|0)).toString(16).slice(1);}
+
+function logoEl(op,size){
+  const direct=directImg(op.logoLink)||directImg(op.site);
+  const dom=domainFrom(op.logoLink)||domainFrom(op.site);
+  const color=colorFor(op.nome);
+  const makeFb=()=>{
+    const d=document.createElement("div");
+    d.className="op-logo fallback";
+    d.style.background="linear-gradient(135deg,"+color+","+shade(color,-18)+")";
+    if(size)d.style.cssText+=";width:"+size+"px;height:"+size+"px;font-size:"+(size*0.33)+"px";
+    d.textContent=initials(op.nome);return d;
+  };
+  const bg=logoBg(op);
+  const img=document.createElement("img");
+  img.className="op-logo";img.alt=op.nome;img.loading="lazy";
+  let st="";
+  if(size)st+="width:"+size+"px;height:"+size+"px;";
+  if(bg)st+="background:"+bg+";border-color:"+bg+";padding:7px;";
+  if(st)img.style.cssText=st;
+  if(direct){
+    // link direto da imagem da logo -> usa exatamente como veio
+    img.src=direct;
+    img.onerror=function(){const f=makeFb();if(this.parentNode)this.parentNode.replaceChild(f,this);};
+    return img;
+  }
+  if(dom){
+    // a partir do site do convenio -> tenta logo, depois favicone, depois iniciais
+    img.src="https://logo.clearbit.com/"+dom;
+    img.onerror=function(){
+      this.onerror=function(){const f=makeFb();if(this.parentNode)this.parentNode.replaceChild(f,this);};
+      this.src="https://www.google.com/s2/favicons?sz=128&domain="+dom;
+    };
+    return img;
+  }
+  return makeFb();
+}
+
+function parseDate(s){
+  const t=clean(s);if(!t)return null;
+  const m=t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(!m)return null;
+  var a=+m[1], b=+m[2], y=+m[3], month, day;
+  if(a>12 && b<=12){ day=a; month=b; }   // primeiro numero > 12 => dia (formato dd/mm)
+  else { month=a; day=b; }               // padrao mm/dd (como a planilha costuma exportar)
+  if(month<1||month>12||day<1||day>31)return null;
+  return new Date(y,month-1,day);
+}
+function fmtDate(s){const d=parseDate(s);if(!d)return clean(s)||"—";return d.toLocaleDateString("pt-BR");}
+
+const el=id=>document.getElementById(id);
+function show(id){["loading","error","home","detail"].forEach(x=>el(x).classList.toggle("hidden",x!==id));}
+
+function setView(v){
+  VIEW=v;
+  document.querySelectorAll(".vtab").forEach(b=>b.classList.toggle("active",b.getAttribute("data-view")===v));
+  show("home");renderHome();window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderHome(){
+  const list=currentList();
+  if(VIEW==="clinicas"){
+    el("kpi-total-l").textContent="Clínicas cadastradas";
+    el("kpi-ativas-l").textContent="Clínicas ativas";
+    el("grid-title").textContent="Clínicas com contrato";
+  }else{
+    el("kpi-total-l").textContent="Convênios cadastrados";
+    el("kpi-ativas-l").textContent="Operadoras ativas";
+    el("grid-title").textContent="Operadoras credenciadas";
+  }
+  el("kpi-total").textContent=list.length;
+  el("kpi-ativas").textContent=list.filter(o=>!statusInfo(o).bad).length;
+  let max=null;
+  list.forEach(o=>{const d=parseDate(o.atualizacao);if(d&&(!max||d>max))max=d;});
+  el("kpi-data").textContent=LAST_EDIT||(max?max.toLocaleDateString("pt-BR"):"—");
+  renderGrid();
+}
+function matches(o,term){if(!term)return true;const t=term.toLowerCase();return Object.values(o).some(v=>String(v).toLowerCase().includes(t));}
+
+function renderGrid(){
+  const term=el("q").value.trim();
+  const sort=el("sort").value;
+  const full=currentList();
+  let list=full.filter(o=>matches(o,term));
+  if(sort==="az")list.sort((a,b)=>a.nome.localeCompare(b.nome,"pt"));
+  else list.sort((a,b)=>{const da=parseDate(a.atualizacao),db=parseDate(b.atualizacao);return (db?db.getTime():0)-(da?da.getTime():0);});
+  const g=el("grid");g.innerHTML="";
+  el("grid-count").textContent=list.length+" de "+full.length;
+  el("empty").classList.toggle("hidden",list.length>0);
+  const isClin=VIEW==="clinicas";
+  list.forEach(o=>{
+    const c=document.createElement("div");c.className="op-card fade";
+    const st=statusInfo(o);
+    if(st.bad){c.classList.add("inactive");const b=document.createElement("span");b.className="status-badge";b.textContent=st.label;c.appendChild(b);}
+    if(!isClin && isAbramge(o)){const ab=document.createElement("span");ab.className="abramge-badge";ab.textContent="ABRAMGE";c.appendChild(ab);}
+    c.appendChild(logoEl(o,64));
+    const nm=document.createElement("div");nm.className="op-name";nm.textContent=o.nome;c.appendChild(nm);
+    const up=document.createElement("div");up.className="op-upd";up.innerHTML="Atualizado: <b>"+fmtDate(o.atualizacao)+"</b>";c.appendChild(up);
+    if(st.bad&&st.date){const sn=document.createElement("div");sn.className="op-susp";sn.textContent=st.verbo+" desde "+st.date;c.appendChild(sn);}
+    c.onclick=()=> isClin ? openDetailClinica(o) : openDetail(o);
+    g.appendChild(c);
+  });
+}
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function linkify(s){
+  let t=esc(clean(s));
+  t=t.replace(/(https?:\/\/[^\s,]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');
+  t=t.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,'<a href="mailto:$1">$1</a>');
+  return t;
+}
+function ruleHTML(label,val){
+  const empty=isEmptyVal(val);
+  const safe=empty?"A preencher":linkify(val);
+  return '<div class="rule"><div class="rl">'+esc(label)+'</div><div class="rv'+(empty?' empty':'')+'">'+safe+'</div></div>';
+}
+function linkChip(label,val,icon){
+  if(isEmptyVal(val))return '<span class="chip">'+icon+label+': <b style="color:#b3bcb6;font-style:italic">a preencher</b></span>';
+  return '<span class="chip">'+icon+label+': <b>'+esc(clean(val))+'</b></span>';
+}
+function actionBtn(label,val,icon){
+  if(isEmptyVal(val)||!/^https?:\/\//i.test(clean(val)))return '<span class="btn disabled">'+icon+label+'</span>';
+  return '<a class="btn primary" href="'+esc(clean(val))+'" target="_blank" rel="noopener">'+icon+label+'</a>';
+}
+function section(title,alt,icon,rules){
+  return '<div class="section fade"><div class="section-h'+(alt?' alt':'')+'"><div class="si">'+icon+'</div><h3>'+esc(title)+'</h3></div><div class="rules">'+rules.map(r=>ruleHTML(r[0],r[1])).join("")+'</div></div>';
+}
+
+function openDetail(o){
+  window.scrollTo({top:0,behavior:"smooth"});
+  const ic={
+    phone:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13 1.05.36 2.07.7 3.06a2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l2.02-1.27a2 2 0 0 1 2.11-.45c.99.34 2.01.57 3.06.7A2 2 0 0 1 22 16.92Z"/></svg> ',
+    site:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></svg> ',
+    portal:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg> '
+  };
+  const secRec=section("Recepção",false,svgUser(),[
+    ["Documentos Obrigatórios para atendimento",o.documentos],
+    ["Serviços contratados",o.servicos],
+    ["Remoção",o.remocao],
+    ["Regulação Psiquiátrica",o.remocaoPsiq],
+    ["Urgência/Emergência Prazo de solicitação",o.prazoUrg],
+    ["Medicação em PA",o.medicacaoPA],
+    ["Site da Operadora",o.site||o.logoLink],
+    ["Portal de Elegibilidade",o.portal],
+    ["Contatos (e-mail)",o.contatos]
+  ]);
+  const secMat=section("Regra de Materiais",false,svgBox(),[
+    ["Material de Consumo",o.materialConsumo],
+    ["Itens não constantes na SIMPRO",o.itensSimpro],
+    ["OPME - Aquisição Hospital",o.opmeHospital],
+    ["OPME - Aquisição Operadora",o.opmeOperadora]
+  ]);
+  const secMed=section("Medicamentos, Dietas e Quimioterápicos",true,svgPill(),[
+    ["Medicamentos de Uso Comum",o.medComum],
+    ["Medicamentos de Uso Restrito Hospitalar",o.medRestrito],
+    ["Medicamentos Manipulados",o.medManipulado],
+    ["Quimioterápicos",o.quimio],
+    ["Dieta Parenteral",o.dietaParenteral],
+    ["Dieta Enteral",o.dietaEnteral],
+    ["Itens não constantes no Brasíndice",o.itensBrasindice]
+  ]);
+  const secSadt=section("SADT, Honorários, Hemoterapia e Pacotes",false,svgPulse(),[
+    ["Hemoterapia (Pacca)",o.hemoterapia],
+    ["Filme Radiológico",o.filme],
+    ["SADT - 1ª Regra",o.sadt1],
+    ["Honorários Médicos - 1ª Regra",o.hon1],
+    ["SADT - 2ª Regra",o.sadt2],
+    ["Honorários Médicos - 2ª Regra",o.hon2],
+    ["Pacotes",o.pacotes]
+  ]);
+  const secFat=section("Faturamento",true,svgDoc(),[
+    ["Prazo de Envio de Faturamento",o.prazoFat],
+    ["Prazo de Recurso de Glosa",o.prazoGlosa],
+    ["Observações",o.observacao]
+  ]);
+
+  el("detail").innerHTML=
+   '<div class="breadcrumb"><button id="bc-home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Início</button><span class="sep">/</span><span>Operadoras</span><span class="sep">/</span><span class="current">'+esc(o.nome)+'</span></div>'+
+   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(function(){var si=statusInfo(o);return si.bad?' <span class="status-badge lg">'+si.label+(si.date?' · desde '+esc(si.date):'')+'</span>':'';})()+(isAbramge(o)?' <span class="abramge-badge lg">ABRAMGE</span>':'')+'</h1><div class="dh-meta">'+
+     (isEmptyVal(o.ans)?'':'<span class="chip">ANS nº <b>'+esc(clean(o.ans))+'</b></span>')+
+     '<span class="chip">Vigência da tabela: <b>'+fmtDate(o.vigencia)+'</b></span>'+
+     '<span class="chip">Última atualização: <b>'+fmtDate(o.atualizacao)+'</b></span>'+
+     linkChip("Telefone",o.telefone,ic.phone)+
+   '</div></div><div class="dh-actions">'+
+     actionBtn("Site",o.site||o.logoLink,ic.site)+
+     actionBtn("Portal de Elegibilidade",o.portal,ic.portal)+
+   '</div></div>'+
+   secRec+secMat+secMed+secSadt+secFat;
+
+  el("detail").querySelector("#dh-logo").appendChild(logoEl(o,84));
+  el("bc-home").onclick=goHome;
+  show("detail");
+}
+
+function openDetailClinica(o){
+  window.scrollTo({top:0,behavior:"smooth"});
+  const secAtend=section("Atendimento",false,svgUser(),[
+    ["Serviços contratados",o.servicos],
+    ["Anatomopatológico",o.anatomo],
+    ["Agendamento",o.agendamento],
+    ["Contato para agendamentos",o.contato],
+    ["Identificação do paciente",o.identificacao],
+    ["Contatos (e-mail)",o.contatos]
+  ]);
+  const secFat=section("Faturamento e Pagamento",true,svgDoc(),[
+    ["Envio da Nota Fiscal",o.envioNf],
+    ["Prazo",o.prazoFat],
+    ["Pagamento",o.pagamento],
+    ["Dados Bancários",o.dadosBanc]
+  ]);
+  el("detail").innerHTML=
+   '<div class="breadcrumb"><button id="bc-home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Início</button><span class="sep">/</span><span>Clínicas</span><span class="sep">/</span><span class="current">'+esc(o.nome)+'</span></div>'+
+   '<div class="detail-head fade"><div id="dh-logo"></div><div class="dh-main"><h1>'+esc(o.nome)+(function(){var si=statusInfo(o);return si.bad?' <span class="status-badge lg">'+si.label+(si.date?' · desde '+esc(si.date):'')+'</span>':'';})()+'</h1><div class="dh-meta">'+
+     '<span class="chip">Vigência da tabela: <b>'+fmtDate(o.vigencia)+'</b></span>'+
+     '<span class="chip">Última atualização: <b>'+fmtDate(o.atualizacao)+'</b></span>'+
+     (isEmptyVal(o.telefone)?'':'<span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13 1.05.36 2.07.7 3.06a2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l2.02-1.27a2 2 0 0 1 2.11-.45c.99.34 2.01.57 3.06.7A2 2 0 0 1 22 16.92Z"/></svg> Telefone: <b>'+esc(clean(o.telefone))+'</b></span>')+
+   '</div></div></div>'+
+   secAtend+secFat;
+  el("detail").querySelector("#dh-logo").appendChild(logoEl(o,84));
+  el("bc-home").onclick=goHome;
+  show("detail");
+}
+
+function svgBox(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>';}
+function svgPill(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>';}
+function svgPulse(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>';}
+function svgDoc(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>';}
+function svgUser(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';}
+
+function goHome(){show("home");renderGrid();window.scrollTo({top:0,behavior:"smooth"});}
+
+el("q").addEventListener("input",()=>{ if(!el("detail").classList.contains("hidden"))goHome(); renderGrid(); });
+el("sort").addEventListener("change",renderGrid);
+document.querySelectorAll(".vtab").forEach(b=>b.addEventListener("click",()=>setView(b.getAttribute("data-view"))));
+
+// Pasta da rede: mostra o caminho e copia para a area de transferencia (colar no Explorador)
+const PASTA_COMERCIAL="\\\\fileserver\\usuarios\\antigo\\Comercial compartilhamento";
+(function(){
+  var pEl=el("folder-path"); if(pEl)pEl.textContent=PASTA_COMERCIAL;
+  var btn=el("copy-folder"); if(!btn)return;
+  function feedback(){var o="Copiar caminho";btn.textContent="✓ Copiado! Cole no Explorador (Win+E)";setTimeout(function(){btn.textContent=o;},2800);}
+  function fallback(){try{var ta=document.createElement("textarea");ta.value=PASTA_COMERCIAL;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);feedback();}catch(e){alert("Copie o caminho:\n"+PASTA_COMERCIAL);}}
+  btn.onclick=function(){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(PASTA_COMERCIAL).then(feedback,fallback);}
+    else fallback();
+  };
+})();
+
+// Le a data/hora carimbada pelo script (aba META) -> data da ultima edicao real.
+async function fetchLastEdit(){
+  try{
+    const m=CSV_URL.match(/\/d\/([^\/]+)/);
+    if(!m)return;
+    const url="https://docs.google.com/spreadsheets/d/"+m[1]+"/gviz/tq?tqx=out:csv&sheet=META&_cb="+Date.now();
+    const r=await fetch(url);
+    if(!r.ok)return;
+    const t=await r.text();
+    if(/^\s*<!doctype html|<html/i.test(t))return;
+    const rows=parseCSV(t);
+    for(let i=0;i<rows.length;i++){
+      const v=clean(rows[i][0]);
+      if(v && v.toUpperCase()!=="ATUALIZADO"){LAST_EDIT=v;break;}
+    }
+  }catch(e){}
+}
+
+async function fetchClinicas(){
+  try{
+    const m=CSV_URL.match(/\/d\/([^\/]+)/);
+    if(!m)return;
+    const url="https://docs.google.com/spreadsheets/d/"+m[1]+"/gviz/tq?tqx=out:csv&sheet="+encodeURIComponent(CLINICAS_SHEET)+"&headers=1&_cb="+Date.now();
+    const r=await fetch(url);
+    if(!r.ok)return;
+    const t=await r.text();
+    if(/^\s*<!doctype html|<html/i.test(t))return;
+    DATA_CLINICAS=parseClinicas(t);
+  }catch(e){}
+}
+
+async function load(){
+  show("loading");
+  try{
+    if(!CSV_URL||CSV_URL.indexOf("COLE_AQUI")>=0||CSV_URL.indexOf("http")<0){
+      throw new Error("Configure a constante CSV_URL no index.html com a URL do CSV publicado do Google Sheets (veja o README).");
+    }
+    const sep=CSV_URL.indexOf("?")>=0?"&":"?";
+    const resp=await fetch(CSV_URL+sep+"_cb="+Date.now()); // cache-buster p/ refletir edicoes
+    if(!resp.ok)throw new Error("HTTP "+resp.status+" ao buscar o CSV. Confirme se a planilha esta publicada/compartilhada publicamente.");
+    const text=await resp.text();
+    if(!text||/^\s*<!doctype html|<html/i.test(text))throw new Error("A URL nao retornou CSV (provavelmente a planilha nao esta publica). Reveja o passo de publicacao no README.");
+    DATA=buildRecords(text);
+    if(!DATA.length)throw new Error("Nenhuma operadora identificada no CSV.");
+    LAST_EDIT="";await fetchLastEdit();
+    DATA_CLINICAS=[];await fetchClinicas();
+    const now=new Date().toLocaleString("pt-BR");
+    el("foot").innerHTML="Fonte ao vivo: Google Sheets (CSV publicado) &mdash; <b>"+DATA.length+"</b> operadoras &middot; carregado em "+now+".<br>Clique em <b>Atualizar dados</b> para refletir alteracoes feitas na planilha.";
+    show("home");renderHome();
+  }catch(e){
+    show("error");el("error-msg").textContent=String((e&&e.message)||e);
+  }
+}
+const rb=document.getElementById("reload-btn");if(rb)rb.onclick=load;
+load();
+</script>
+</body>
+</html>
