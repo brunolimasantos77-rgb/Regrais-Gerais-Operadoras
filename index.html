@@ -406,6 +406,7 @@ function clinicIndices(header){
     prazoFat: find(h=>h.indexOf("PRAZO")>=0),
     pagamento: find(h=>h.indexOf("PAGAMENTO")>=0 && h.indexOf("FATURAMENTO")<0),
     dadosBanc: find(h=>h.indexOf("BANCARIO")>=0),
+    tabelaPropria: find(h=>h.indexOf("PROFISSIONAIS")>=0 || (h.indexOf("TABELA")>=0 && h.indexOf("PROPRIA")>=0)),
     status: find(h=>/\bSTATUS\b/.test(h))
   };
 }
@@ -437,6 +438,7 @@ function parseClinicas(text){
       prazoFat: ci.prazoFat>=0?clean(row[ci.prazoFat]):"",
       pagamento: ci.pagamento>=0?clean(row[ci.pagamento]):"",
       dadosBanc: ci.dadosBanc>=0?clean(row[ci.dadosBanc]):"",
+      tabelaPropria: ci.tabelaPropria>=0?clean(row[ci.tabelaPropria]):"",
       status: ci.status>=0?clean(row[ci.status]):"",
       abramge:""
     });
@@ -669,6 +671,7 @@ function openDetailClinica(o){
     ["Contatos (e-mail)",o.contatos]
   ]);
   const secFat=section("Faturamento e Pagamento",true,svgDoc(),[
+    ["Tabela de Serviços Profissionais Própria do Convênio",o.tabelaPropria],
     ["Envio da Nota Fiscal",o.envioNf],
     ["Prazo",o.prazoFat],
     ["Pagamento",o.pagamento]
