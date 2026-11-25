@@ -129,6 +129,113 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .appbar-inner{flex-wrap:wrap}
 }
 .footer-note{margin-top:30px;font-size:12px;color:var(--muted);text-align:center;line-height:1.6}
+
+/* ===== Aba Comercial (protótipo) ===== */
+#tabsbar .viewtabs{margin-bottom:20px;flex-wrap:wrap;max-width:100%}
+@media(max-width:600px){#tabsbar .vtab{padding:8px 14px}}
+.vtab .lk{width:14px;height:14px}
+.com-proto{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:#fff8e6;border:1px dashed #e9c46a;border-radius:14px;padding:10px 16px;margin-bottom:18px;font-size:13px;color:#5c4a14}
+.com-proto b{color:#3d3108}
+.com-proto .sim{display:inline-flex;gap:4px;background:#fff;border:1px solid #ecd9a3;border-radius:10px;padding:3px}
+.com-proto .sim button{padding:6px 10px;border-radius:8px;font-size:12.5px;font-weight:700;color:#5c4a14}
+.com-proto .sim button.on{background:#5c4a14;color:#fff}
+.gate{max-width:440px;margin:24px auto 50px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 28px;text-align:center}
+.gate .gi{width:56px;height:56px;border-radius:16px;background:var(--orange-soft);color:var(--orange);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px}
+.gate h2{font-size:19px;margin-bottom:6px}
+.gate p{font-size:13.5px;color:#4b555c;line-height:1.5;margin-bottom:18px}
+.gate label{display:block;text-align:left;font-size:12px;font-weight:700;color:#4b555c;margin-bottom:6px}
+.gate input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px;margin-bottom:8px}
+.gate input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
+.gate .err{color:#a8352b;font-size:12.5px;font-weight:600;text-align:left;margin-bottom:8px}
+.gate .btn{width:100%;justify-content:center;padding:12px}
+.com-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-bottom:14px}
+.com-head h2{font-size:20px;font-weight:800}
+.com-head .spacer{flex:1}
+.topics{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.topic{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:14.5px;font-weight:800;color:var(--text);box-shadow:var(--shadow)}
+.topic.on{border-color:var(--green);background:var(--green);color:#fff}
+.topic .soon{font-size:10px;font-weight:800;letter-spacing:.04em;background:var(--orange);color:#fff;border-radius:20px;padding:2px 8px}
+.topic.on .soon{background:#fff;color:var(--orange)}
+.subnav{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.subnav button{padding:10px 14px;font-size:13.5px;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.subnav button.on{color:var(--green);border-bottom-color:var(--green)}
+.subnav .n{display:inline-block;min-width:20px;padding:1px 6px;border-radius:10px;background:var(--orange);color:#fff;font-size:11px;margin-left:5px}
+.params{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:18px;font-size:13px;color:#4b555c}
+.seg{display:inline-flex;gap:3px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{padding:6px 10px;border-radius:8px;font-size:12.5px;font-weight:700;color:#4b555c}
+.seg button.on{background:var(--green);color:#fff}
+.ckpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.ckpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+.ckpi .v{font-size:26px;font-weight:800;line-height:1.1;white-space:nowrap}
+.ckpi .v small{font-size:14px;font-weight:700;color:var(--muted)}
+.ckpi .l{font-size:12.5px;color:#5f6a72;margin-top:4px}
+.ckpi.g .v{color:#0b7a0b}.ckpi.r .v{color:#b42f2f}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}
+.card-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.card-h h3{font-size:15px}
+.card-h .sub{font-size:12.5px;color:#5f6a72}
+.card-h .spacer{flex:1}
+.card-b{padding:14px 18px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:#4b555c}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+.prow{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.prow:first-of-type{border-top:none}
+.prow .nm{font-size:13.5px;font-weight:700}
+.prow .nm small{display:block;font-weight:500;color:#5f6a72;font-size:11.5px}
+.sbar{display:flex;height:16px;gap:2px}
+.sbar span{display:block;height:100%;border-radius:4px;min-width:3px}
+.prow .ct{font-size:12px;color:#4b555c;white-space:nowrap;text-align:right}
+.st-g{background:#0ca30c}.st-y{background:#fab219}.st-r{background:#d03b3b}.st-w{background:#b9c0bc}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.pill i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.pill.g{background:#e3f5e3;color:#0b5e0b}.pill.y{background:#fff3d6;color:#7a5200}.pill.r{background:#fbe3e3;color:#9c2525}.pill.w{background:#eef1ef;color:#4b555c}
+.pill.g i{background:#0ca30c}.pill.y i{background:#fab219}.pill.r i{background:#d03b3b}.pill.w i{background:#9aa39e}
+.fbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.fbar input,.fbar select{padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px;color:var(--text)}
+.fbar input{flex:1 1 220px;min-width:160px}
+.fbar input:focus,.fbar select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.chipf{padding:7px 12px;border-radius:20px;border:1px solid var(--line);background:#fff;font-size:12.5px;font-weight:700;color:#2c3338;display:inline-flex;align-items:center;gap:6px}
+.chipf.on{border-color:var(--green);background:var(--green-soft);color:var(--green-dark)}
+.chipf i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.scroll{overflow-x:auto}
+table.ct{width:100%;border-collapse:collapse;font-size:13px}
+table.ct th{text-align:left;font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:#155c39;background:var(--green-soft);padding:10px 12px;white-space:nowrap}
+table.ct td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:middle}
+table.ct td.n,table.ct th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+table.ct tr:hover td{background:#f7faf8}
+table.ct .tu{font-size:11.5px;color:#5f6a72;font-variant-numeric:tabular-nums}
+table.ct .neg{color:#b42f2f;font-weight:700}
+table.ct .pos{color:#0b7a0b;font-weight:700}
+.cmp td.best{background:#e3f5e3}
+.cmp td.worst{background:#fdeede}
+.cmp td .tag{display:block;font-size:10px;font-weight:800;letter-spacing:.03em}
+.cmp td.best .tag{color:#0b5e0b}.cmp td.worst .tag{color:#9a4a12}
+.cmp td.np{color:#8a949c;font-style:italic;white-space:nowrap}
+.cmp th.p{text-align:right}
+.rank{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.rk{border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.rk h4{font-size:13.5px;margin-bottom:8px}
+.rk ol{list-style:none}
+.rk li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12.5px;padding:4px 0}
+.rk li .pos{font-weight:800;color:var(--muted)}
+.rk li.first .pos,.rk li.first .who{color:var(--green-dark);font-weight:800}
+.rk .bar{grid-column:2/4;height:5px;border-radius:3px;background:var(--bg);overflow:hidden;margin-top:-2px}
+.rk .bar span{display:block;height:100%;background:var(--green)}
+.rk li.first .bar span{background:var(--green-dark)}
+.note{font-size:12px;color:#5f6a72;margin-top:10px;line-height:1.5}
+.dlmsg{font-size:12.5px;font-weight:600;color:var(--green-dark)}
+.soonbox{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.soonbox .sb{border:1px dashed #cdd4d0;border-radius:14px;padding:14px;background:#fafbfa}
+.soonbox h4{font-size:14px;margin-bottom:6px}
+.soonbox p{font-size:12.5px;color:#4b555c;line-height:1.5}
+.restr{max-width:520px;margin:30px auto 60px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 26px;box-shadow:var(--shadow)}
+.restr h2{font-size:19px;margin:10px 0 6px}
+.restr p{font-size:13.5px;color:#4b555c;line-height:1.55}
+@media(max-width:600px){.prow{grid-template-columns:minmax(0,1fr) auto}.prow .sbar{grid-column:1/3;order:3}.ckpi .v{font-size:22px}}
+.cmp th:first-child,.cmp td:first-child{position:sticky;left:0;z-index:1;background:#fff;min-width:220px;box-shadow:1px 0 0 var(--line)}
+.cmp th:first-child{background:var(--green-soft)}
+.cmp tr:hover td:first-child{background:#f7faf8}
 </style>
 </head>
 <body>
@@ -164,11 +271,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <p id="error-msg"></p>
   </div>
 
-  <section id="home" class="hidden">
+  <div id="tabsbar" class="hidden">
     <div class="viewtabs" id="viewtabs">
       <button class="vtab active" data-view="operadoras">Operadoras</button>
       <button class="vtab" data-view="clinicas">Clínicas</button>
+      <button class="vtab" data-view="comercial"><svg class="lk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Comercial</button>
     </div>
+  </div>
+
+  <section id="home" class="hidden">
     <div class="kpis">
       <div class="kpi"><div class="ic g"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div><div><div class="v" id="kpi-total">-</div><div class="l" id="kpi-total-l">Convenios cadastrados</div></div></div>
       <div class="kpi"><div class="ic g"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></div><div><div class="v" id="kpi-ativas">-</div><div class="l" id="kpi-ativas-l">Operadoras ativas</div></div></div>
@@ -196,6 +307,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   </section>
 
   <section id="detail" class="hidden"></section>
+
+  <section id="comercial" class="hidden"><div id="com-root"></div></section>
 
   <div class="footer-note" id="foot"></div>
 </main>
@@ -518,12 +631,13 @@ function parseDate(s){
 function fmtDate(s){const d=parseDate(s);if(!d)return clean(s)||"—";return d.toLocaleDateString("pt-BR");}
 
 const el=id=>document.getElementById(id);
-function show(id){["loading","error","home","detail"].forEach(x=>el(x).classList.toggle("hidden",x!==id));}
+function show(id){["loading","error","home","detail","comercial"].forEach(x=>el(x).classList.toggle("hidden",x!==id));el("tabsbar").classList.toggle("hidden",!(id==="home"||id==="comercial"));}
 
 function setView(v){
   VIEW=v;
   document.querySelectorAll(".vtab").forEach(b=>b.classList.toggle("active",b.getAttribute("data-view")===v));
-  show("home");renderHome();window.scrollTo({top:0,behavior:"smooth"});
+  if(v==="comercial"){show("comercial");renderComercial();}else{show("home");renderHome();}
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 function renderHome(){
   const list=currentList();
@@ -695,9 +809,9 @@ function svgPulse(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill
 function svgDoc(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>';}
 function svgUser(){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';}
 
-function goHome(){show("home");renderGrid();window.scrollTo({top:0,behavior:"smooth"});}
+function goHome(){if(VIEW==="comercial")VIEW="operadoras";show("home");renderGrid();window.scrollTo({top:0,behavior:"smooth"});}
 
-el("q").addEventListener("input",()=>{ if(!el("detail").classList.contains("hidden"))goHome(); renderGrid(); });
+el("q").addEventListener("input",()=>{ if(VIEW==="comercial")return; if(!el("detail").classList.contains("hidden"))goHome(); renderGrid(); });
 el("sort").addEventListener("change",renderGrid);
 document.querySelectorAll(".vtab").forEach(b=>b.addEventListener("click",()=>setView(b.getAttribute("data-view"))));
 
@@ -762,11 +876,326 @@ async function load(){
     DATA_CLINICAS=[];await fetchClinicas();
     const now=new Date().toLocaleString("pt-BR");
     el("foot").innerHTML="Fonte ao vivo: Google Sheets (CSV publicado) &mdash; <b>"+DATA.length+"</b> operadoras &middot; carregado em "+now+".<br>Clique em <b>Atualizar dados</b> para refletir alteracoes feitas na planilha.";
-    show("home");renderHome();
+    if(VIEW==="comercial"){show("comercial");renderComercial();}else{show("home");renderHome();}
   }catch(e){
     show("error");el("error-msg").textContent=String((e&&e.message)||e);
   }
 }
+
+/* ===== ABA COMERCIAL =====
+   Versão do Claude (artefato privado): os dados vêm do arquivo dados-imagem.json
+   publicado junto com a página (gerado da planilha "Exames de Custo Imagem").
+   Versão do GitHub (próxima etapa): os mesmos dados virão da planilha privada
+   "Comercial" no Google Drive, lida com o login Google de quem abre a página.
+   NUNCA colocar custos ou tabelas no código do GitHub. */
+let COM_DATA = null, COM_LOAD = "idle";
+const COM = { unlocked:false, topic:"img", view:"geral", busy:false,
+  f:{q:"",parc:"",mod:"",st:""}, c:{q:"",mod:""}, ab:{a:"",b:"",mod:"",show:"comum"}, pwdErr:false, msg:"" };
+/* Os dados ficam CRIPTOGRAFADOS (AES-GCM 256, chave derivada da senha com PBKDF2-SHA256).
+   A senha não fica no código: sem ela o arquivo dados-imagem.enc.json é ilegível. */
+const comB64 = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+async function comDecrypt(pwd){
+  const r = await fetch("dados-imagem.enc.json",{cache:"no-store"});
+  if(!r.ok) throw {code:"rede"};
+  const pk = await r.json();
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pwd), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({name:"PBKDF2", salt:comB64(pk.salt), iterations:pk.iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+  let plain;
+  try{ plain = await crypto.subtle.decrypt({name:"AES-GCM", iv:comB64(pk.iv)}, key, comB64(pk.ct)); }
+  catch(e){ throw {code:"senha"}; }
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+async function comUnlock(pwd){
+  COM.busy=true; COM.pwdErr=false; COM.netErr=false; renderComercial();
+  try{
+    COM_DATA = await comDecrypt(pwd);
+    const n={}; COM_DATA.tabelas.forEach(t=>n[t.p]=(n[t.p]||0)+1);
+    const ord = COM_DATA.parceiros.map(p=>p.id).sort((x,y)=>(n[y]||0)-(n[x]||0));
+    if(!COM.ab.a){ COM.ab.a = ord[0]||""; COM.ab.b = ord[1]||""; }
+    COM_LOAD="ok"; COM.unlocked=true;
+  }catch(e){ if(e&&e.code==="senha") COM.pwdErr=true; else COM.netErr=true; }
+  COM.busy=false; renderComercial();
+}
+
+const comEsc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const brl = v => v==null||isNaN(v) ? "—" : v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const pct = v => v==null||isNaN(v) ? "—" : (v*100).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})+"%";
+const ST = {
+  g:{k:"g",label:"Dentro da margem",short:"OK"},
+  y:{k:"y",label:"Abaixo da margem",short:"Abaixo da margem"},
+  r:{k:"r",label:"Abaixo do custo",short:"Abaixo do custo"},
+  w:{k:"w",label:"Sem custo / sem DE-PARA",short:"Sem custo"}
+};
+const ST_ORDER = ["g","y","r","w"];
+const MODS = ["RX","US","TC","RM","Mamografia","Doppler"];
+const MOD_NOME = {RX:"Raio-X",US:"Ultrassonografia",TC:"Tomografia",RM:"Ressonância",Mamografia:"Mamografia",Doppler:"Doppler"};
+
+/* Preço mínimo = coluna H da planilha (VALOR MÍNIMO). Sem ela, custo × 1,42 (mesma regra da planilha). */
+function comMin(cc){ return cc==null?null:(typeof cc.min==="number"&&cc.min>0?cc.min:cc.c*1.42); }
+function comRows(){
+  const ex = Object.fromEntries(COM_DATA.exames.map(e=>[e.tuss,e]));
+  const pa = Object.fromEntries(COM_DATA.parceiros.map(p=>[p.id,p]));
+  const cu = Object.fromEntries(COM_DATA.custos.map(c=>[c.tuss,c]));
+  return COM_DATA.tabelas.map(t=>{
+    const e=ex[t.tuss], p=pa[t.p], cc=cu[t.tuss], c=cc?cc.c:undefined;
+    const temCusto = typeof c==="number";
+    const min = temCusto ? comMin(cc) : null;
+    const marg = !temCusto ? null : t.v/c-1;
+    const st = !temCusto ? "w" : t.v>=min-1e-9 ? "g" : t.v>=c ? "y" : "r";
+    return { pid:p.id, parceiro:p.nome, tipo:p.tipo, tuss:t.tuss, exame:e.exame, mod:e.mod,
+      valor:t.v, custo:temCusto?c:null, min, marg, st, gap: temCusto ? t.v-min : null };
+  });
+}
+function pill(st){ const s=ST[st]; return '<span class="pill '+st+'"><i></i>'+s.label+'</span>'; }
+
+/* ---------- download em Excel (capability "downloads") ---------- */
+let __dl = null, __dlTried = false;
+async function comDownloads(){ if(!__dlTried){ __dlTried=true; try{ __dl = (window.claude&&window.claude.use) ? await window.claude.use("downloads") : null; }catch(e){ __dl=null; } } return __dl; }
+async function comExport(nome, linhas){
+  try{
+    const ws = XLSX.utils.json_to_sheet(linhas);
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, nome.slice(0,31));
+    const buf = XLSX.write(wb,{bookType:"xlsx",type:"array"});
+    const dl = await comDownloads();
+    if(!dl){ COM.msg="Download indisponível nesta visualização."; return renderComercial(); }
+    await dl.save({filename:"Comercial - "+nome+".xlsx", data:buf});
+    COM.msg="Arquivo salvo: Comercial - "+nome+".xlsx";
+  }catch(e){
+    COM.msg = e&&e.code==="declined" ? "Download cancelado." : "Não foi possível salvar o arquivo agora.";
+  }
+  renderComercial();
+}
+
+async function comExportAB(rows){
+  const A=COM.ab.a,B=COM.ab.b,d=comABData(rows);
+  const r2=v=>v==null?null:Math.round(v*100)/100;
+  const resumo=[["Relatório",A+" × "+B],["Modalidade",COM.ab.mod?MOD_NOME[COM.ab.mod]:"Todas"],["Preço mínimo","Coluna H da planilha (custo × 1,42)"],["Fonte",COM_DATA.fonte+" · custo "+COM_DATA.mesCusto],[],
+    ["Exames em comum",d.comum.length],[A+" paga mais",d.aMais],[B+" paga mais",d.bMais],["Iguais",d.iguais],["Só "+A+" paga",d.soA],["Só "+B+" paga",d.soB],
+    ["Remuneração média "+A+" (× custo)",d.mA==null?null:Math.round(d.mA*100)/100],["Remuneração média "+B+" (× custo)",d.mB==null?null:Math.round(d.mB*100)/100],[],
+    ["Status","Exames "+A,"Exames "+B]].concat(ST_ORDER.map(s=>[ST[s].label,d.cA[s],d.cB[s]]));
+  const det=d.linhas.map(l=>({"Código TUSS":l.e.tuss,"Exame":l.e.exame,"Modalidade":MOD_NOME[l.e.mod]||l.e.mod,"Custo":r2(l.c),"Preço mínimo":r2(l.min),
+    [A]:l.a?l.a.valor:"Não previsto",["Status "+A]:l.a?ST[l.a.st].label:"",[B]:l.b?l.b.valor:"Não previsto",["Status "+B]:l.b?ST[l.b.st].label:"",
+    "A − B (R$)":r2(l.dif),"A vs B (%)":l.difp==null?null:Math.round(l.difp*1000)/10,"Quem paga mais":l.grupo!=="comum"?"":l.dif>0.004?A:l.dif< -0.004?B:"Iguais"}));
+  try{
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(resumo),"Resumo");
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(det),"Detalhe");
+    const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
+    const dl=await comDownloads(); if(!dl){COM.msg="Download indisponível nesta visualização.";return renderComercial();}
+    const nome=("Relatorio "+A+" x "+B).replace(/[\\/:*?"<>|]/g,"");
+    await dl.save({filename:nome+".xlsx",data:buf}); COM.msg="Relatório salvo: "+nome+".xlsx";
+  }catch(e){ COM.msg=e&&e.code==="declined"?"Download cancelado.":"Não foi possível salvar o arquivo agora."; }
+  renderComercial();
+}
+
+/* ---------- telas ---------- */
+function comProtoBar(){
+  if(!COM_DATA) return '';
+  return '<div class="com-proto"><span>Fonte: <b>'+comEsc(COM_DATA.fonte)+'</b> · custo de referência '+comEsc(COM_DATA.mesCusto)+'</span></div>';
+}
+function comGate(){
+  return '<div class="gate"><span class="gi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>'+
+    '<h2>Área Comercial</h2><p>Tabelas de parceiros, custos do hospital e margens. Digite a senha do time Comercial.</p>'+
+    '<form id="com-form"><label for="com-pwd">Senha</label><input id="com-pwd" type="password" autocomplete="off" placeholder="Digite a senha"'+(COM.busy?' disabled':'')+'>'+
+    (COM.pwdErr?'<div class="err">Senha incorreta. Tente de novo.</div>':'')+
+    (COM.netErr?'<div class="err">Não foi possível carregar os dados. Verifique a conexão e tente de novo.</div>':'')+
+    '<button class="btn primary" type="submit"'+(COM.busy?' disabled':'')+'>'+(COM.busy?'Abrindo…':'Entrar')+'</button></form></div>';
+}
+function comParams(){
+  return '<div class="params"><span><b>Preço mínimo</b> = coluna H da planilha (custo × 1,42, margem de 29,6% sobre o preço).</span>'+
+    '<span><b>%</b> = valor pago ÷ custo − 1, igual à planilha.</span></div>';
+}
+function comKpis(rows){
+  const comC = rows.filter(r=>r.st!=="w");
+  const g = comC.filter(r=>r.st==="g").length, r = comC.filter(r=>r.st==="r").length;
+  const byP = {};
+  comC.forEach(x=>{ (byP[x.pid]=byP[x.pid]||{n:x.parceiro,s:0,k:0}); byP[x.pid].s+=x.valor/x.custo; byP[x.pid].k++; });
+  const best = Object.values(byP).filter(o=>o.k>=10).map(o=>({n:o.n,v:o.s/o.k})).sort((a,b)=>b.v-a.v)[0];
+  const pend = comNPend(rows);
+  return '<div class="ckpis">'+
+    '<div class="ckpi"><div class="v">'+rows.length+'</div><div class="l">Preços analisados · '+COM_DATA.exames.length+' exames · '+COM_DATA.parceiros.length+' parceiros</div></div>'+
+    '<div class="ckpi g"><div class="v">'+pct(g/comC.length)+'</div><div class="l">Dentro da margem ('+g+' de '+comC.length+' com custo)</div></div>'+
+    '<div class="ckpi r"><div class="v">'+pct(r/comC.length)+'</div><div class="l">Abaixo do custo ('+r+' preços)</div></div>'+
+    '<div class="ckpi"><div class="v" style="font-size:18px;white-space:normal">'+comEsc(best?best.n:"—")+'</div><div class="l">Melhor remuneração média: '+(best?best.v.toLocaleString("pt-BR",{maximumFractionDigits:2})+"× o custo":"")+' (parceiros com 10+ exames)</div></div>'+
+    '<div class="ckpi"><div class="v">'+pend+'</div><div class="l">Pendências para completar</div></div></div>';
+}
+function comNPend(rows){ return (COM_DATA.pendDePara||[]).length + (COM_DATA.revisar||[]).length + comSemCusto(rows).length; }
+function comSemCusto(rows){
+  const m={}; rows.filter(r=>r.st==="w").forEach(r=>{ (m[r.tuss]=m[r.tuss]||{tuss:r.tuss,exame:r.exame,mod:r.mod,n:0}).n++; }); return Object.values(m);
+}
+function comGeral(rows){
+  const parts = COM_DATA.parceiros.map(p=>{
+    const rs = rows.filter(r=>r.pid===p.id); const tot=rs.length;
+    const cnt = Object.fromEntries(ST_ORDER.map(k=>[k,rs.filter(r=>r.st===k).length]));
+    const segs = ST_ORDER.filter(k=>cnt[k]).map(k=>'<span class="st-'+k+'" style="flex:'+cnt[k]+' 1 0" title="'+ST[k].label+': '+cnt[k]+' de '+tot+'"></span>').join("");
+    return '<div class="prow"><div class="nm">'+comEsc(p.nome)+'<small>'+(p.tipo?comEsc(p.tipo)+' · ':'')+tot+' exames na tabela</small></div><div class="sbar" role="img" aria-label="'+ST_ORDER.map(k=>ST[k].label+" "+cnt[k]).join(", ")+'">'+segs+'</div>'+
+      '<div class="ct">'+cnt.g+' ok · '+cnt.y+' abaixo da margem · '+(cnt.r?'<b style="color:#9c2525">'+cnt.r+' abaixo do custo</b>':'0 abaixo do custo')+(cnt.w?' · '+cnt.w+' sem custo':'')+'</div></div>';
+  }).join("");
+  const top = rows.filter(r=>r.st!=="w"&&r.gap<0).sort((a,b)=>a.gap-b.gap).slice(0,10);
+  const topRows = top.map(r=>'<tr><td>'+comEsc(r.exame)+'<div class="tu">TUSS '+r.tuss+' · '+comEsc(MOD_NOME[r.mod])+'</div></td><td>'+comEsc(r.parceiro)+'</td><td class="n">'+brl(r.valor)+'</td><td class="n">'+brl(r.custo)+'</td><td class="n">'+brl(r.min)+'</td><td class="n neg">'+brl(-r.gap)+'</td><td>'+pill(r.st)+'</td></tr>').join("");
+  return comKpis(rows)+
+    '<div class="card"><div class="card-h"><h3>Situação de cada parceiro</h3><span class="sub">quantos exames de cada tabela cobrem custo + margem</span><span class="spacer"></span>'+
+    '<div class="legend">'+ST_ORDER.map(k=>'<span><i class="sw st-'+k+'"></i>'+ST[k].label+'</span>').join("")+'</div></div><div class="card-b">'+parts+'</div></div>'+
+    '<div class="card"><div class="card-h"><h3>Top 10 exames mais deficitários</h3><span class="sub">quanto falta para chegar ao preço mínimo (custo + margem)</span><span class="spacer"></span><button class="btn" data-exp="top10">Baixar Excel</button></div>'+
+    '<div class="scroll"><table class="ct"><thead><tr><th>Exame</th><th>Parceiro</th><th class="n">Valor pago</th><th class="n">Custo</th><th class="n">Preço mínimo</th><th class="n">Falta</th><th>Status</th></tr></thead><tbody>'+topRows+'</tbody></table></div></div>';
+}
+function comFiltrar(rows){
+  const q=nzCom(COM.f.q);
+  return rows.filter(r=>(!COM.f.parc||r.pid===COM.f.parc)&&(!COM.f.mod||r.mod===COM.f.mod)&&(!COM.f.st||r.st===COM.f.st)&&(!q||nzCom(r.exame+" "+r.tuss+" "+r.parceiro).includes(q)));
+}
+function nzCom(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim(); }
+function comTabela(rows){
+  const base = rows.filter(r=>(!COM.f.parc||r.pid===COM.f.parc)&&(!COM.f.mod||r.mod===COM.f.mod));
+  const list = comFiltrar(rows).sort((a,b)=>"rywg".indexOf(a.st)-"rywg".indexOf(b.st) || (a.gap??0)-(b.gap??0));
+  const chips = ['<button class="chipf '+(!COM.f.st?"on":"")+'" data-st="">Todos <b>'+base.length+'</b></button>'].concat(
+    ST_ORDER.map(k=>'<button class="chipf '+(COM.f.st===k?"on":"")+'" data-st="'+k+'"><i class="st-'+k+'"></i>'+ST[k].short+' <b>'+base.filter(r=>r.st===k).length+'</b></button>')).join("");
+  const opt = (v,l,sel)=>'<option value="'+comEsc(v)+'"'+(sel===v?" selected":"")+'>'+comEsc(l)+'</option>';
+  const body = list.map(r=>'<tr><td><b>'+comEsc(r.parceiro)+'</b></td><td>'+(r.tipo?comEsc(r.tipo):'—')+'</td><td class="tu">'+r.tuss+'</td><td>'+comEsc(r.exame)+'</td><td>'+comEsc(MOD_NOME[r.mod])+'</td>'+
+    '<td class="n">'+brl(r.valor)+'</td><td class="n">'+brl(r.custo)+'</td><td class="n">'+brl(r.min)+'</td><td class="n '+(r.marg==null?"":r.marg<0?"neg":r.st==="g"?"pos":"")+'">'+pct(r.marg)+'</td><td>'+pill(r.st)+'</td></tr>').join("");
+  return '<div class="fbar"><input id="cf-q" type="search" placeholder="Buscar exame, TUSS ou parceiro" value="'+comEsc(COM.f.q)+'" aria-label="Buscar">'+
+    '<select id="cf-parc" aria-label="Parceiro">'+opt("","Todos os parceiros",COM.f.parc)+COM_DATA.parceiros.map(p=>opt(p.id,p.nome,COM.f.parc)).join("")+'</select>'+
+    '<select id="cf-mod" aria-label="Modalidade">'+opt("","Todas as modalidades",COM.f.mod)+MODS.map(m=>opt(m,MOD_NOME[m],COM.f.mod)).join("")+'</select>'+
+    '<button class="btn" data-exp="tabela">Baixar Excel</button></div><div class="fbar">'+chips+'</div>'+
+    '<div class="card"><div class="scroll"><table class="ct"><thead><tr><th>Parceiro</th><th>Tipo</th><th>TUSS</th><th>Exame</th><th>Modalidade</th><th class="n">Valor pago</th><th class="n">Custo hospital</th><th class="n">Preço mínimo</th><th class="n">% sobre o custo</th><th>Status</th></tr></thead><tbody>'+
+    (body||'<tr><td colspan="10" style="text-align:center;padding:30px;color:#5f6a72">Nenhum exame com esses filtros.</td></tr>')+'</tbody></table></div></div>'+
+    '<p class="note">Verde: valor pago ≥ preço mínimo (coluna H). Amarelo: cobre o custo, mas não o mínimo. Vermelho: abaixo do custo.</p>';
+}
+function comMatriz(rows){
+  const q=nzCom(COM.c.q);
+  const exs = COM_DATA.exames.filter(e=>(!COM.c.mod||e.mod===COM.c.mod)&&(!q||nzCom(e.exame+" "+e.tuss).includes(q)));
+  const P = COM_DATA.parceiros;
+  const cell = {}; rows.forEach(r=>{ cell[r.tuss+"|"+r.pid]=r; });
+  const body = exs.map(e=>{
+    const vals = P.map(p=>cell[e.tuss+"|"+p.id]).filter(Boolean).map(r=>r.valor);
+    const mx=Math.max(...vals), mn=Math.min(...vals), many=vals.length>1;
+    const any = rows.find(r=>r.tuss===e.tuss);
+    return '<tr><td>'+comEsc(e.exame)+'<div class="tu">TUSS '+e.tuss+' · '+comEsc(MOD_NOME[e.mod])+'</div></td><td class="n">'+brl(any?any.custo:null)+'</td><td class="n">'+brl(any?any.min:null)+'</td>'+
+      P.map(p=>{ const r=cell[e.tuss+"|"+p.id]; if(!r) return '<td class="np n">Não previsto</td>';
+        const cls = many&&r.valor===mx?"best":many&&r.valor===mn?"worst":"";
+        return '<td class="n '+cls+'" title="'+ST[r.st].label+'"><span class="pill '+r.st+'" style="padding:0;background:none"><i></i></span> '+brl(r.valor)+(cls==="best"?'<span class="tag">MELHOR</span>':cls==="worst"?'<span class="tag">PIOR</span>':'')+'</td>'; }).join("")+'</tr>';
+  }).join("");
+  const rank = MODS.filter(m=>!COM.c.mod||m===COM.c.mod).map(m=>{
+    const ps = P.map(p=>{ const rs=rows.filter(r=>r.pid===p.id&&r.mod===m&&r.custo); return {n:p.nome,k:rs.length,v:rs.length?rs.reduce((s,r)=>s+r.valor/r.custo,0)/rs.length:null}; }).filter(x=>x.v!=null).sort((a,b)=>b.v-a.v);
+    const top = ps.length?ps[0].v:1;
+    return '<div class="rk"><h4>'+comEsc(MOD_NOME[m])+'</h4><ol>'+ps.map((x,i)=>'<li class="'+(i===0?"first":"")+'"><span class="pos">'+(i+1)+'º</span><span class="who">'+comEsc(x.n)+'</span><span class="n" style="font-variant-numeric:tabular-nums">'+x.v.toLocaleString("pt-BR",{maximumFractionDigits:2})+'× o custo</span><span class="bar"><span style="width:'+(x.v/top*100).toFixed(0)+'%"></span></span></li>').join("")+'</ol></div>';
+  }).join("");
+  const opt = (v,l)=>'<option value="'+v+'"'+(COM.c.mod===v?" selected":"")+'>'+l+'</option>';
+  return '<div class="fbar"><input id="cc-q" type="search" placeholder="Buscar exame ou código TUSS" value="'+comEsc(COM.c.q)+'" aria-label="Buscar exame">'+
+    '<select id="cc-mod" aria-label="Modalidade">'+opt("","Todas as modalidades")+MODS.map(m=>opt(m,MOD_NOME[m])).join("")+'</select><button class="btn" data-exp="comparativo">Baixar Excel</button></div>'+
+    '<div class="card"><div class="card-h"><h3>Valor pago por exame, lado a lado</h3><span class="sub">verde = melhor remuneração · laranja = pior · "Não previsto" = oportunidade de inclusão</span></div>'+
+    '<div class="scroll"><table class="ct cmp"><thead><tr><th>Exame</th><th class="n">Custo</th><th class="n">Preço mínimo</th>'+P.map(p=>'<th class="p">'+comEsc(p.nome)+'</th>').join("")+'</tr></thead><tbody>'+
+    (body||'<tr><td colspan="'+(3+P.length)+'" style="text-align:center;padding:30px;color:#5f6a72">Nenhum exame encontrado.</td></tr>')+'</tbody></table></div></div>'+
+    '<div class="card"><div class="card-h"><h3>Quem paga melhor em cada modalidade</h3><span class="sub">média de valor pago ÷ custo, só exames com custo cadastrado</span></div><div class="card-b"><div class="rank">'+rank+'</div></div></div>';
+}
+function comPend(rows){
+  const sc = comSemCusto(rows), rv = COM_DATA.revisar||[], dp = COM_DATA.pendDePara||[];
+  const ex = Object.fromEntries(COM_DATA.exames.map(e=>[e.tuss,e]));
+  return '<div class="card"><div class="card-h"><h3>Valores a revisar ('+rv.length+')</h3><span class="sub">células com texto no lugar do valor na planilha de origem</span><span class="spacer"></span><button class="btn" data-exp="pendencias">Baixar Excel</button></div>'+
+    '<div class="scroll"><table class="ct"><thead><tr><th>Parceiro</th><th>TUSS</th><th>Exame</th><th>Na origem</th><th>Motivo</th></tr></thead><tbody>'+
+    (rv.map(x=>'<tr><td><b>'+comEsc(x.p)+'</b></td><td class="tu">'+comEsc(x.tuss)+'</td><td>'+comEsc(ex[x.tuss]?ex[x.tuss].exame:"")+'</td><td>'+comEsc(x.txt)+'</td><td>'+comEsc(x.motivo)+'</td></tr>').join("")||'<tr><td colspan="5" style="padding:20px;color:#5f6a72">Nada a revisar.</td></tr>')+'</tbody></table></div></div>'+
+    '<div class="card"><div class="card-h"><h3>Sem DE-PARA ('+dp.length+')</h3><span class="sub">itens que o sistema não sabe a qual exame padrão correspondem</span></div><div class="card-b" style="font-size:13px;color:#4b555c">'+
+    (dp.length? dp.map(x=>comEsc(x.p)+' · '+comEsc(x.orig)).join('<br>') : 'Nenhum: a planilha atual já cruza todos os parceiros pelo código TUSS. O DE-PARA passa a ser usado quando entrarem os arquivos brutos de cada parceiro.')+'</div></div>'+
+    '<div class="card"><div class="card-h"><h3>Sem custo cadastrado ('+sc.length+')</h3><span class="sub">exames nas tabelas sem custo da Controladoria</span></div><div class="card-b" style="font-size:13px;color:#4b555c">'+
+    (sc.length? sc.map(x=>comEsc(x.tuss)+' · '+comEsc(x.exame)).join('<br>') : 'Todos os exames têm custo.')+'</div></div>';
+}
+function comDT(){
+  const g=[["Diárias","Enfermaria, apartamento e UTI. Diária cheia é comparada só com diária cheia; frações (6–12h, 12–24h) viram itens próprios."],
+           ["Taxas","Taxas de sala, de uso de equipamento e administrativas, por código padrão."],
+           ["Gases","Oxigênio, ar comprimido e óxido nitroso convertidos para uma unidade base (hora, minuto ou m³) antes de comparar."],
+           ["Outros","Itens sem grupo definido ficam aqui até serem classificados no DE-PARA."]];
+  return '<div class="card"><div class="card-h"><h3>Diárias, Taxas e Outras Taxas</h3><span class="sub">estrutura pronta, aguardando os dados</span></div><div class="card-b">'+
+    '<div class="soonbox">'+g.map(x=>'<div class="sb"><h4>'+x[0]+'</h4><p>'+x[1]+'</p></div>').join("")+'</div>'+
+    '<p class="note">Mesma lógica dos exames de imagem: Tabela × Custo, Comparativo e Pendências. Abas já previstas na planilha privada: DT_TABELAS, DT_CUSTOS e DT_DEPARA.</p></div></div>';
+}
+/* ---------- Parceiro × Parceiro (2 parceiros + custo) ---------- */
+function comABData(rows){
+  const A=COM.ab.a, B=COM.ab.b;
+  const ex = COM_DATA.exames.filter(e=>!COM.ab.mod||e.mod===COM.ab.mod);
+  const cell={}; rows.forEach(r=>cell[r.tuss+"|"+r.pid]=r);
+  const cuo = Object.fromEntries(COM_DATA.custos.map(c=>[c.tuss,c]));
+  const linhas = ex.map(e=>{ const a=cell[e.tuss+"|"+A], b=cell[e.tuss+"|"+B]; if(!a&&!b) return null;
+    const cc=cuo[e.tuss], c=cc?cc.c:null, min=comMin(cc);
+    const dif = a&&b ? a.valor-b.valor : null;
+    return {e, a, b, c, min, dif, difp: a&&b&&b.valor ? a.valor/b.valor-1 : null, grupo: a&&b?"comum":a?"soA":"soB"}; }).filter(Boolean);
+  const comum = linhas.filter(l=>l.grupo==="comum");
+  const media = k => { const xs=linhas.filter(l=>l[k]&&l.c).map(l=>l[k].valor/l.c); return xs.length? xs.reduce((s,v)=>s+v,0)/xs.length : null; };
+  const cnt = k => Object.fromEntries(ST_ORDER.map(s=>[s,linhas.filter(l=>l[k]&&l[k].st===s).length]));
+  return { linhas, comum, aMais: comum.filter(l=>l.dif>0.004).length, bMais: comum.filter(l=>l.dif< -0.004).length,
+    iguais: comum.filter(l=>Math.abs(l.dif)<=0.004).length, soA: linhas.filter(l=>l.grupo==="soA").length, soB: linhas.filter(l=>l.grupo==="soB").length,
+    mA: media("a"), mB: media("b"), cA: cnt("a"), cB: cnt("b") };
+}
+function comAB(rows){
+  const P = COM_DATA.parceiros, A=COM.ab.a, B=COM.ab.b, d=comABData(rows);
+  const opt=(v,sel)=>'<option value="'+comEsc(v)+'"'+(v===sel?" selected":"")+'>'+comEsc(v)+'</option>';
+  const vis = d.linhas.filter(l=>COM.ab.show==="todos"||l.grupo===COM.ab.show);
+  const fx = v => v==null?"—":v.toLocaleString("pt-BR",{maximumFractionDigits:2})+"× o custo";
+  const stc = c => ST_ORDER.map(s=>'<span title="'+ST[s].label+'"><i class="sw st-'+s+'"></i> '+c[s]+'</span>').join(" ");
+  const tab = vis.map(l=>{
+    const best = l.grupo!=="comum"?"":l.dif>0.004?"A":l.dif< -0.004?"B":"=";
+    const cv=(r,who)=>!r?'<td class="np n">Não previsto</td>':'<td class="n '+(best===who?"best":best&&best!=="="?"worst":"")+'">'+brl(r.valor)+'</td><td>'+pill(r.st)+'</td>';
+    return '<tr><td>'+comEsc(l.e.exame)+'<div class="tu">TUSS '+comEsc(l.e.tuss)+' · '+comEsc(MOD_NOME[l.e.mod]||l.e.mod)+'</div></td><td class="n">'+brl(l.c)+'</td><td class="n">'+brl(l.min)+'</td>'+
+      cv(l.a,"A")+(l.a?'':'<td></td>')+cv(l.b,"B")+(l.b?'':'<td></td>')+
+      '<td class="n '+(l.dif>0.004?"pos":l.dif< -0.004?"neg":"")+'">'+(l.dif==null?"—":brl(l.dif))+'</td><td class="n">'+(l.difp==null?"—":pct(l.difp))+'</td></tr>';
+  }).join("");
+  const tabsShow=[["comum","Em comum ("+d.comum.length+")"],["soA","Só "+A+" ("+d.soA+")"],["soB","Só "+B+" ("+d.soB+")"],["todos","Todos ("+d.linhas.length+")"]];
+  return '<div class="fbar"><label class="sub" for="ab-a" style="font-size:12.5px;font-weight:700">Parceiro A</label><select id="ab-a">'+P.map(p=>opt(p.id,A)).join("")+'</select>'+
+    '<label for="ab-b" style="font-size:12.5px;font-weight:700">Parceiro B</label><select id="ab-b">'+P.map(p=>opt(p.id,B)).join("")+'</select>'+
+    '<select id="ab-mod" aria-label="Modalidade"><option value="">Todas as modalidades</option>'+MODS.map(m=>'<option value="'+m+'"'+(COM.ab.mod===m?" selected":"")+'>'+MOD_NOME[m]+'</option>').join("")+'</select>'+
+    '<button class="btn primary" data-exp="ab">Baixar relatório (Excel)</button></div>'+
+    '<div class="ckpis">'+
+    '<div class="ckpi"><div class="v">'+d.comum.length+'</div><div class="l">Exames em comum</div></div>'+
+    '<div class="ckpi"><div class="v">'+d.aMais+' <small>× '+d.bMais+'</small></div><div class="l">'+comEsc(A)+' paga mais × '+comEsc(B)+' paga mais'+(d.iguais?' · '+d.iguais+' iguais':'')+'</div></div>'+
+    '<div class="ckpi"><div class="v" style="font-size:20px">'+fx(d.mA)+'</div><div class="l">Remuneração média · '+comEsc(A)+'</div><div class="legend" style="margin-top:6px">'+stc(d.cA)+'</div></div>'+
+    '<div class="ckpi"><div class="v" style="font-size:20px">'+fx(d.mB)+'</div><div class="l">Remuneração média · '+comEsc(B)+'</div><div class="legend" style="margin-top:6px">'+stc(d.cB)+'</div></div>'+
+    '<div class="ckpi"><div class="v">'+d.soA+' <small>/ '+d.soB+'</small></div><div class="l">Só '+comEsc(A)+' paga / só '+comEsc(B)+' paga (oportunidades de inclusão)</div></div></div>'+
+    '<div class="fbar">'+tabsShow.map(t=>'<button class="chipf '+(COM.ab.show===t[0]?"on":"")+'" data-abshow="'+t[0]+'">'+comEsc(t[1])+'</button>').join("")+'</div>'+
+    '<div class="card"><div class="scroll"><table class="ct cmp"><thead><tr><th>Exame</th><th class="n">Custo</th><th class="n">Preço mínimo</th><th class="n">'+comEsc(A)+'</th><th>Status A</th><th class="n">'+comEsc(B)+'</th><th>Status B</th><th class="n">A − B</th><th class="n">A vs B</th></tr></thead><tbody>'+
+    (tab||'<tr><td colspan="9" style="text-align:center;padding:30px;color:#5f6a72">Nenhum exame neste filtro.</td></tr>')+'</tbody></table></div></div>'+
+    '<p class="note">Verde = quem paga mais no exame. "A vs B" = quanto A paga a mais (ou a menos) que B. O relatório em Excel traz um resumo e o detalhe exame a exame.</p>';
+}
+
+function renderComercial(){
+  const root = el("com-root"); if(!root) return;
+  let h = comProtoBar();
+  if(!COM.unlocked){ root.innerHTML = h + comGate(); comBind(root); setTimeout(()=>{const i=el("com-pwd"); if(i) i.focus();},50); return; }
+  const rows = comRows();
+  const nPend = comNPend(rows);
+  h += '<div class="com-head"><h2>Área Comercial</h2><span class="spacer"></span>'+(COM.msg?'<span class="dlmsg">'+comEsc(COM.msg)+'</span>':'')+'<button class="btn" data-lock="1">Bloquear</button></div>';
+  h += '<div class="topics"><button class="topic '+(COM.topic==="img"?"on":"")+'" data-topic="img">🩻 Exames de Imagem</button><button class="topic '+(COM.topic==="dt"?"on":"")+'" data-topic="dt">🛏️ Diárias e Taxas <span class="soon">EM BREVE</span></button></div>';
+  if(COM.topic==="dt"){ h += comDT(); }
+  else{
+    const V=[["geral","Visão geral"],["tabela","Tabela × Custo"],["comp","Comparativo"],["ab","Parceiro × Parceiro"],["pend","Pendências"]];
+    h += '<div class="subnav" role="tablist">'+V.map(v=>'<button role="tab" aria-selected="'+(COM.view===v[0])+'" class="'+(COM.view===v[0]?"on":"")+'" data-view2="'+v[0]+'">'+v[1]+(v[0]==="pend"&&nPend?'<span class="n">'+nPend+'</span>':'')+'</button>').join("")+'</div>';
+    h += comParams();
+    h += COM.view==="geral"?comGeral(rows):COM.view==="tabela"?comTabela(rows):COM.view==="comp"?comMatriz(rows):COM.view==="ab"?comAB(rows):comPend(rows);
+  }
+  root.innerHTML = h; COM.msg=""; comBind(root);
+}
+
+function comBind(root){
+  const f=el("com-form"); if(f) f.onsubmit=e=>{e.preventDefault(); if(COM.busy) return; comUnlock(el("com-pwd").value);};
+  root.querySelectorAll("[data-lock]").forEach(b=>b.onclick=()=>{COM.unlocked=false;COM_DATA=null;COM_LOAD="idle";renderComercial();});
+  root.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{COM.topic=b.getAttribute("data-topic");renderComercial();});
+  root.querySelectorAll("[data-view2]").forEach(b=>b.onclick=()=>{COM.view=b.getAttribute("data-view2");renderComercial();});
+  root.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{COM.f.st=b.getAttribute("data-st");renderComercial();});
+  const keep=(id,fn)=>{const i=el(id); if(!i) return; i.oninput=i.onchange=()=>{fn(i.value); const pos=i.selectionStart; renderComercial(); const j=el(id); if(j&&j.focus&&i.tagName==="INPUT"){j.focus(); try{j.setSelectionRange(pos,pos)}catch(_){}}};};
+  keep("cf-q",v=>COM.f.q=v); keep("cf-parc",v=>COM.f.parc=v); keep("cf-mod",v=>COM.f.mod=v);
+  keep("cc-q",v=>COM.c.q=v); keep("cc-mod",v=>COM.c.mod=v);
+  keep("ab-a",v=>COM.ab.a=v); keep("ab-b",v=>COM.ab.b=v); keep("ab-mod",v=>COM.ab.mod=v);
+  root.querySelectorAll("[data-abshow]").forEach(b=>b.onclick=()=>{COM.ab.show=b.getAttribute("data-abshow");renderComercial();});
+  root.querySelectorAll("[data-exp]").forEach(b=>b.onclick=()=>{
+    const k=b.getAttribute("data-exp"), rows=comRows();
+    const lin = r=>({"Parceiro":r.parceiro,"Tipo":r.tipo,"Código TUSS":r.tuss,"Exame":r.exame,"Modalidade":MOD_NOME[r.mod],"Valor pago":r.valor,"Custo hospital":r.custo,"Preço mínimo (col. H)":r.min==null?null:Math.round(r.min*100)/100,"% sobre o custo":r.marg==null?null:Math.round(r.marg*1000)/10,"Status":ST[r.st].label});
+    if(k==="tabela") comExport("Tabela x Custo", comFiltrar(rows).map(lin));
+    else if(k==="top10") comExport("Top 10 deficitarios", rows.filter(r=>r.st!=="w"&&r.gap<0).sort((a,b)=>a.gap-b.gap).slice(0,10).map(r=>Object.assign(lin(r),{"Falta para o mínimo":Math.round(-r.gap*100)/100})));
+    else if(k==="comparativo"){ const P=COM_DATA.parceiros; const cell={}; rows.forEach(r=>cell[r.tuss+"|"+r.pid]=r);
+      comExport("Comparativo", COM_DATA.exames.filter(e=>!COM.c.mod||e.mod===COM.c.mod).map(e=>{ const o={"Código TUSS":e.tuss,"Exame":e.exame,"Modalidade":MOD_NOME[e.mod]}; P.forEach(p=>{const r=cell[e.tuss+"|"+p.id]; o[p.nome]=r?r.valor:"Não previsto";}); return o; })); }
+    else if(k==="pendencias"){ const ex=Object.fromEntries(COM_DATA.exames.map(e=>[e.tuss,e]));
+      comExport("Pendencias", (COM_DATA.revisar||[]).map(x=>({"Tipo":"Valor a revisar","Parceiro":x.p,"Código TUSS":x.tuss,"Exame":ex[x.tuss]?ex[x.tuss].exame:"","Na origem":x.txt,"Motivo":x.motivo})).concat(comSemCusto(rows).map(x=>({"Tipo":"Sem custo","Código TUSS":x.tuss,"Exame":x.exame,"Parceiros afetados":x.n})))); }
+    else if(k==="ab") comExportAB(rows);
+  });
+}
+
 const rb=document.getElementById("reload-btn");if(rb)rb.onclick=load;
 load();
 </script>
