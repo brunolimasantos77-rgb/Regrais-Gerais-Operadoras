@@ -199,6 +199,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .chipf.on{border-color:var(--green);background:var(--green-soft);color:var(--green-dark)}
 .chipf i{width:8px;height:8px;border-radius:50%;display:inline-block}
 .scroll{overflow-x:auto}
+.card .scroll{overflow:auto;max-height:calc(100vh - 150px)}
+table.ct thead th{position:sticky;top:0;z-index:2;box-shadow:inset 0 -1px 0 #cfe3d7}
 table.ct{width:100%;border-collapse:collapse;font-size:13px}
 table.ct th{text-align:left;font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:#155c39;background:var(--green-soft);padding:10px 12px;white-space:nowrap}
 table.ct td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:middle}
@@ -234,7 +236,7 @@ table.ct .pos{color:#0b7a0b;font-weight:700}
 .restr p{font-size:13.5px;color:#4b555c;line-height:1.55}
 @media(max-width:600px){.prow{grid-template-columns:minmax(0,1fr) auto}.prow .sbar{grid-column:1/3;order:3}.ckpi .v{font-size:22px}}
 .cmp th:first-child,.cmp td:first-child{position:sticky;left:0;z-index:1;background:#fff;min-width:220px;box-shadow:1px 0 0 var(--line)}
-.cmp th:first-child{background:var(--green-soft)}
+.cmp th:first-child{background:var(--green-soft);z-index:3}
 .cmp tr:hover td:first-child{background:#f7faf8}
 </style>
 </head>
@@ -313,6 +315,7 @@ table.ct .pos{color:#0b7a0b;font-weight:700}
   <div class="footer-note" id="foot"></div>
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* =============================================================
    CONFIGURACAO  ->  cole aqui a URL do CSV publicado do Sheet.
@@ -951,14 +954,18 @@ function pill(st){ const s=ST[st]; return '<span class="pill '+st+'"><i></i>'+s.
 /* ---------- download em Excel (capability "downloads") ---------- */
 let __dl = null, __dlTried = false;
 async function comDownloads(){ if(!__dlTried){ __dlTried=true; try{ __dl = (window.claude&&window.claude.use) ? await window.claude.use("downloads") : null; }catch(e){ __dl=null; } } return __dl; }
+/* Dentro do Claude usa a permissão de download do artefato; no GitHub Pages baixa direto pelo navegador. */
+async function comSalvar(wb, arquivo){
+  const dentroDoClaude = !!(window.claude && window.claude.use);
+  const dl = dentroDoClaude ? await comDownloads() : null;
+  if(dl){ await dl.save({filename:arquivo, data:XLSX.write(wb,{bookType:"xlsx",type:"array"})}); }
+  else { XLSX.writeFile(wb, arquivo); }
+}
 async function comExport(nome, linhas){
   try{
     const ws = XLSX.utils.json_to_sheet(linhas);
     const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, nome.slice(0,31));
-    const buf = XLSX.write(wb,{bookType:"xlsx",type:"array"});
-    const dl = await comDownloads();
-    if(!dl){ COM.msg="Download indisponível nesta visualização."; return renderComercial(); }
-    await dl.save({filename:"Comercial - "+nome+".xlsx", data:buf});
+    await comSalvar(wb, "Comercial - "+nome+".xlsx");
     COM.msg="Arquivo salvo: Comercial - "+nome+".xlsx";
   }catch(e){
     COM.msg = e&&e.code==="declined" ? "Download cancelado." : "Não foi possível salvar o arquivo agora.";
@@ -980,10 +987,8 @@ async function comExportAB(rows){
     const wb=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(resumo),"Resumo");
     XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(det),"Detalhe");
-    const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
-    const dl=await comDownloads(); if(!dl){COM.msg="Download indisponível nesta visualização.";return renderComercial();}
     const nome=("Relatorio "+A+" x "+B).replace(/[\\/:*?"<>|]/g,"");
-    await dl.save({filename:nome+".xlsx",data:buf}); COM.msg="Relatório salvo: "+nome+".xlsx";
+    await comSalvar(wb, nome+".xlsx"); COM.msg="Relatório salvo: "+nome+".xlsx";
   }catch(e){ COM.msg=e&&e.code==="declined"?"Download cancelado.":"Não foi possível salvar o arquivo agora."; }
   renderComercial();
 }
@@ -1058,7 +1063,7 @@ function comTabela(rows){
     '<button class="btn" data-exp="tabela">Baixar Excel</button></div><div class="fbar">'+chips+'</div>'+
     '<div class="card"><div class="scroll"><table class="ct"><thead><tr><th>Parceiro</th><th>Tipo</th><th>TUSS</th><th>Exame</th><th>Modalidade</th><th class="n">Valor pago</th><th class="n">Custo hospital</th><th class="n">Preço mínimo</th><th class="n">% sobre o custo</th><th>Status</th></tr></thead><tbody>'+
     (body||'<tr><td colspan="10" style="text-align:center;padding:30px;color:#5f6a72">Nenhum exame com esses filtros.</td></tr>')+'</tbody></table></div></div>'+
-    '<p class="note">Verde: valor pago ≥ preço mínimo (coluna H). Amarelo: cobre o custo, mas não o mínimo. Vermelho: abaixo do custo.</p>';
+    '';
 }
 function comMatriz(rows){
   const q=nzCom(COM.c.q);
@@ -1156,7 +1161,7 @@ function comAB(rows){
 
 function renderComercial(){
   const root = el("com-root"); if(!root) return;
-  let h = comProtoBar();
+  let h = "";
   if(!COM.unlocked){ root.innerHTML = h + comGate(); comBind(root); setTimeout(()=>{const i=el("com-pwd"); if(i) i.focus();},50); return; }
   const rows = comRows();
   const nPend = comNPend(rows);
@@ -1166,7 +1171,6 @@ function renderComercial(){
   else{
     const V=[["geral","Visão geral"],["tabela","Tabela × Custo"],["comp","Comparativo"],["ab","Parceiro × Parceiro"],["pend","Pendências"]];
     h += '<div class="subnav" role="tablist">'+V.map(v=>'<button role="tab" aria-selected="'+(COM.view===v[0])+'" class="'+(COM.view===v[0]?"on":"")+'" data-view2="'+v[0]+'">'+v[1]+(v[0]==="pend"&&nPend?'<span class="n">'+nPend+'</span>':'')+'</button>').join("")+'</div>';
-    h += comParams();
     h += COM.view==="geral"?comGeral(rows):COM.view==="tabela"?comTabela(rows):COM.view==="comp"?comMatriz(rows):COM.view==="ab"?comAB(rows):comPend(rows);
   }
   root.innerHTML = h; COM.msg=""; comBind(root);
